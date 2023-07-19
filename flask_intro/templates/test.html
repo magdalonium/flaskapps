@@ -1,0 +1,19 @@
+{% extends 'generic.html' %}
+
+{% block skjema %}
+  <form method="post">
+  {% for k, v in inndata.items() %}
+    <label for="{{k}}">{{k}}</label>
+    <input name="{{k}}" value ="{{v}}">
+  {% endfor %}
+    <input type="submit" value="Beregn!">
+  </form>  
+{% endblock %}
+
+{% block output %}
+    <ul>
+    {% for k, v in utdata.items() %}
+        <li>{{k}}: {{v}}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% for person, is in isfavoritter.items() %}
+    <p>{{person}} kjøper {{is}}.</p>  
+  {% endfor %}
+{% endblock %}

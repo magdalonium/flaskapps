@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <table>
+    <tr>
+      <th>Avstand (km)</th>
+      <th>Tempo (min/km)</th>
+      <th>Tid</th>
+      <th>Kommentar</th>
+    </tr>
+    <tr>
+      <td>{{løpedata[0].avstand|desimaltall}}</td>
+      <td>{{(løpedata[0].tid/løpedata[0].avstand)|klokkeslett}}</td>
+      <td>{{løpedata[0].tid|klokkeslett}}</td>
+      <td>{{løpedata[0].kommentar}}</td>
+    </tr>
+    <tr>
+      <td>{{løpedata[1].avstand|desimaltall}}</td>
+      <td>{{(løpedata[1].tid/løpedata[1].avstand)|klokkeslett}}</td>
+      <td>{{løpedata[1].tid|klokkeslett}}</td>
+      <td>{{løpedata[1].kommentar}}</td>
+    </tr> 
+    <tr>
+      <td>{{løpedata[2].avstand|desimaltall}}</td>
+      <td>{{(løpedata[2].tid/løpedata[2].avstand)|klokkeslett}}</td>
+      <td>{{løpedata[2].tid|klokkeslett}}</td>
+      <td>{{løpedata[2].kommentar}}</td>
+    </tr>
+  </table> 
+{% endblock %}

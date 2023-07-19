@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<p>{{beskjed}}</p>
+<hr>
+
+{% if skjema.errors %}
+    <ul class="flash">
+        {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ skjema[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method='GET'>
+
+    {% for felt in skjema %}
+        <p>
+        {{ felt.label if not felt.type =='SubmitField' }}
+        {{ felt }}
+        </p>
+    {% endfor %}
+
+</form>
+</input>
+{% endblock %}

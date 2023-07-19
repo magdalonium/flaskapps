@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{% block title %}{{title}}{% endblock %}</h1>
+{% block innledning %}
+  {% if innledning %}
+    {% for avsnitt in innledning %}
+      <p>{{avsnitt}}</p>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+
+<h2>Inntasting</h2>
+{% block skjema %}
+  <form method="post">
+    {% for k, v in inndata.items() %}
+      <label for="{{k}}">{{k}}:</label>
+      <input class="tall" name="{{k}}" value ="{{v}}">
+    {% endfor %}
+  <input type="submit" value="Beregn!">
+</form>  
+{% endblock %}
+
+<h2>Output</h2>
+{% block output %}
+  <dl>
+    {% for k, v in utdata.items() %}
+      <dt>{{k}}</dt> <dd>{{v}}</dd>
+    {% endfor %}
+  </dl>
+{% endblock %}
+{% endblock %}

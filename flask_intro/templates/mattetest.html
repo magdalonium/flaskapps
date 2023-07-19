@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<table>
+    <tr>
+        <td><code>1 + 1</code></td>
+        <td>{{1 + 1}}</td>
+    </tr>
+    <tr>
+        <td><code>4 - 3</code></td>
+        <td>{{4 - 3}}</td>
+    </tr>
+    <tr>
+        <td>
+            <code>10/3</code><br>
+            <code>10/3|round</code><br>
+            <code>(10/3)|round<code>
+        </td>
+        <td>
+            {{10/3}}<br>
+            {{10/3|round}}<br>
+            {{(10/3)|round}}
+        </td>
+    </tr>
+    <tr>
+        <td><code>10//3</code></td>
+        <td>{{10//3}}</td>
+    </tr>
+    <tr>
+        <td><code>10%3</code></td>
+        <td>{{10%3}}</td>
+    </tr>
+    <tr>
+        <td><code>3*4</code></td>
+        <td>{{3*4}}</td>
+    </tr>
+    <tr>
+        <td><code>4**3</code></td>
+        <td>{{4**3}}</td>
+    </tr>
+</table>
+{% endblock %}

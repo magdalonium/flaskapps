@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/../static/default.css" type="text/css">
+    <style>
+        .tall {width: 40px}
+    </style>
+  </head>
+  <body>
+    <h1>{% block title %}{{title}}{% endblock %}</h1>
+    {% block meny %}
+      {% if kart %}
+        <nav>
+          {% for sti, navn in kart%}
+            <a href="{{sti}}">{{navn}}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+    
+    {% endblock %}
+    {% block innledning %}
+        {% if innledning %}
+            {% for avsnitt in innledning %}
+                <p>{{avsnitt}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endblock %}
+    
+    <h2>Inntasting</h2>
+    {% block skjema %}
+      <form method="post">
+      {% for k, v in inndata.items() %}
+        <label for="{{k}}">{{k}}:</label>
+        <input class="tall" name="{{k}}" value ="{{v}}">
+      {% endfor %}
+        <input type="submit" value="Beregn!">
+      </form>  
+    {% endblock %}
+    <h2>Output</h2>
+    {% block output %}
+        <dl>
+        {% for k, v in utdata.items() %}
+            <dt>{{k}}</dt> <dd>{{v}}</dd>
+        {% endfor %}
+        </dl>
+    {% endblock %}
+    </div>
+  </body>
+<html>

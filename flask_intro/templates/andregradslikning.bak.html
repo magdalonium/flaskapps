@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Andregradslikningsløser</h1>
+    <p>Løser andregradslikninger på formen ax<sup>2</sup> + bx + c = 0</p>
+
+    <form method='GET'>
+            a = <input class='tall' type='text' name='a' value='0'>
+            b = <input class='tall' type='text' name='b' value='0'>
+            c = <input class='tall' type='text' name='c' value='0'>
+            <input type="submit" value="Beregn">
+    </form>
+    {% if inndata %}
+
+    <h2>Løsning</h2>
+      <p>Løser:  {{ inndata.a }}x<sup>2</sup> + {{ inndata.b }}x + {{ inndata.c }} = 0
+      {% if løsninger %}
+        {% if løsninger|length == 1 %}
+          <p>Løsning: x<sub>1</sub> = {{løsninger}}</p>
+        {% else %}
+          <p>
+            Løsninger:
+            {% for løsning in løsninger %}
+              {{"og" if loop.last else (", " if not loop.first )}} x<sub>{{loop.index}}</sub> = {{løsning}}
+            {% endfor %}
+          </p>
+        {% endif %}
+      {% else %}
+        <p>Likningen har ingen løsning<p>
+      {% endif %}
+    <img src={{bilde}}>
+    {% endif %}
+  </body>
+</html>
+{% endblock %}

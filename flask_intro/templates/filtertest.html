@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<table>
+    <tr>
+        <td><code>"start"|capitalize</code></td>
+        <td>{{"start"|capitalize}}</td>
+    </tr>
+    <tr>
+        <td><code>mysterievariabel|default("Finnes ikke")</code></td>
+        <td>{{mysterievariabel|default("Finnes ikke")}}</td>
+    </tr>
+    <tr>
+        <td><code>{"b": 3, "e": 2, "a": 4}|dictsort</code></td>
+        <td>{{{"b": 3, "e": 2, "a": 4}|dictsort}}</td>
+    </tr>
+    <tr>
+        <td><code>["Loke", "Line", "Quoc"]|first</code></td>
+        <td>{{["Loke", "Line", "Quoc"]|first}}</td>
+    </tr>
+    <tr>
+        <td><code>["Loke", "Line", "Quoc"]|join(" som liker ")</code></td>
+        <td>{{["Loke", "Line", "Quoc"]|join(" som liker ")}}</td>
+    </tr>
+    <tr>
+        <td><code>["Loke", "Line", "Quoc"]|length</code></td>
+        <td>{{["Loke", "Line", "Quoc"]|length}}</td>
+    </tr>
+    <tr>
+        <td>
+            <code>"heisann"|list</code><br>
+            <code>{"b": 3, "e": 2, "a": 4}|list</code>
+        </td>
+        <td>
+            {{"heisann"|list}}<br>           
+            {{{"b": 3, "e": 2, "a": 4}|list}}            
+        </td>
+    </tr>
+    <tr>
+        <td><code>[7, 42, 2, 13]|max</code></td>
+        <td>{{[7, 42, 2, 13]|max}}</td>
+    </tr>
+    <tr>
+        <td><code>[7, 42, 2, 13]|min</code></td>
+        <td><code>{{[7, 42, 2, 13]|min}}</code></td>
+    </tr>
+    <tr>
+        <td><code>[7, 42, 2, 13]|random</code></td>
+        <td>{{[7, 42, 2, 13]|random}}</td>
+    </tr>
+    <tr>
+        <td>
+            <code>[7, 42, 2, 13]|reverse</code><br>
+            <code>[7, 42, 2, 13]|reverse|list</code>
+        </td>
+        <td>
+            {{[7, 42, 2, 13]|reverse}}<br>
+            [7, 42, 2, 13]|reverse|list
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <code>35.464|round</code><br>
+            <code>35.464|round(1)</code><br>
+            <code>35.464|round(-1)</code>
+        </td>
+        <td>
+            {{35.464|round}} <i>(nærmeste heltall)</i><br>
+            {{35.464|round(1)}} <i>(nærmeste tidel)</i><br>
+            {{35.464|round(-1)}} <i>(nærmeste tier)</i>
+        </td>
+    </tr>    
+    <tr>
+        <td><code>[7, 42, 2, 13]|sort</code></td>
+        <td>{{[7, 42, 2, 13]|sort}}</td>
+    </tr>
+    <tr>
+        <td><code>[7, 42, 2, 13]|sum</code></td>
+        <td>{{[7, 42, 2, 13]|sum}}</td>
+    </tr>
+    <tr>
+        <td>
+            <code>[1, 1, 3, 2, 4, 2]|unique</code><br>
+            <code>[1, 1, 3, 2, 4, 2]|unique|list</code>
+        </td>
+        <td>
+            {{[1, 1, 3, 2, 4, 2]|unique}}<br>
+            {{[1, 1, 3, 2, 4, 2]|unique|list}}
+        </td>
+    </tr>
+</table>
+{% endblock %}

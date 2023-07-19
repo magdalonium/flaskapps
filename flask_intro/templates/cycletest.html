@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+    .odd {
+        background-color: lightblue;
+    }
+    .even {
+        background-color: pink;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<table>
+  {% for person, is in isfavoritter.items() %}
+    <tr class={{loop.cycle("odd", "even")}}><td>{{loop.index}}:</td><td>{{person}} kjøper {{is}}</td></td>
+  {% endfor %}
+</table> 
+{% endblock %}
+

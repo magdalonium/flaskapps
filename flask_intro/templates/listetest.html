@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>
+  {% for person, is in isfavoritter.items() %}
+    {{"og" if loop.last else (", " if not loop.first ) }} {{person}} kjøper {{is}}
+  {% endfor %}
+</p> 
+{% endblock %}
+

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<p>{{beskjed}}</p>
+<form method='GET'>
+    {{skjema.innhold.label}}
+    {{skjema.innhold}}
+    <input type="submit" value="Send inn">
+</form>
+</input>
+{% endblock %}

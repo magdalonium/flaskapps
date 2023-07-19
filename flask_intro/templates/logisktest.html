@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if vinner %}
+    <p>Du er en vinner. Gratulerer!</p>
+    <img src='https://imgs.xkcd.com/comics/new_car.png'>
+{% else %}
+    <p>Du tapte. Last inn siden på nytt for å prøve igjen.</p>
+{% endif %}
+
+<hr>
+
+{% for format, innhold in elementer %}
+    {% if format=='programkode' %}
+        <pre class='code'>{{innhold}}</pre>
+    {% elif format=='sitat' %}
+        <blockquote>{{innhold}}</blockquote>
+    {% elif format=='liste' %}
+        <ul>
+            {% for element in innhold %}
+                <li>{{element}}</li>
+            {% endfor %}
+        </ul>        
+    {% else %}
+        <p>{{innhold}}</p>
+    {% endif %}
+{% endfor %}
+{% endblock %}
