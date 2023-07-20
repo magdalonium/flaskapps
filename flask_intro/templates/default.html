@@ -4,6 +4,15 @@
     <meta charset='utf-8'>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/static/default.css" type="text/css">
+    {% if bakgrunn %}
+      <style>
+         html {background-image: url({{url_for('static', filename=bakgrunn)}});
+               background-size: cover;
+               background-attachment: fixed;
+               background-position: center;}
+         body {opacity: 0.95;}
+      </style>
+    {% endif %}
     {% block head %}{% endblock %}
   </head>
   <body>
@@ -11,11 +20,12 @@
 <h1>{{tittel}}</h1>
 <nav>
     <a href="{{'/'}}">Hjem</a>
-</nav>
+    <a href="{{'..'}}">Opp</a>
 
+</nav>
 {% if innledning %}
     {% for avsnitt in innledning %}
-        {{innledning}}
+        <p>{{avsnitt}}</p>
     {% endfor %}
     <hr>
 {% endif %}

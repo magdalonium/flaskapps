@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{% block title %}{{tittel}}{% endblock %}</h1>
+{% if skjema %}
+  <form method='GET'>
+    {% for felt in skjema %}
+      <p>
+        {{ felt.label if not felt.type=='SubmitForm' }}
+        {{ felt }}
+      </p>
+    </form>
+  {% endfor %}
+{% endif %}
+{{"<hr>" if skjema and utdata}}
+{% for data in utdata %}
+<p>{{data}}</p>
+{% endfor %}
+{% endblock %}

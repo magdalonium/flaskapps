@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Eksamen 1P høst 2021: Oppgave 7</title>
+  <style>
+    body { max-width: fit-content; background: #e6e6e6; font-family: calibri, sans-serif; }
+    table { border-collapse: collapse; margin: 0.25rem; }
+    td { padding: 0.3em; }
+    input { border: 0; width: inherit; }
+    th { text-align: left; }
+    td.in { border: solid 1px; background: white; }
+    td.con { border: solid 1px; }
+    td.out { border: solid 1px; background: #7ebf9e; }
+    .høyre {float:right; }
+  </style>
+</head>
+<body>
+<h1>Lunsj på nett</h1>
+<form method='GET'>
+<table>
+  <tr><td colspan="3"></td><td colspan="2" class="con">Rabatt ved kjøp av mer enn {{RABATTANTALL}} retter</td><td class="con">{{RABATTSATS|pst}}</td></tr>
+  <tr><th>Kunde</th><td class="in">{{skjema.kunde}}</td> <td></td><td colspan="2" class="con">Levering ved kortere avstand enn {{GRENSEAVSTAND}} km</td><td class="con">{{KORTLEVERING|nok}}</td></tr>
+  <tr><td colspan="3"></td><td colspan="2" class="con">Levering ved avstander som er {{GRENSEAVSTAND}} km eller lengre</td><td class="con">{{LANGLEVERING|nok}}</td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><th>Lunsj</th><td colspan="5"></td></tr>
+  <tr><td></td><td style='text-align: center'>Antall porsjoner</td><td style='text-align: center'>Pris per porsjon</td><td style='text-align: center'>Totalt</td><td colspan="2"></td></tr>
+  <tr><td>Dagens pasta</td><td class="in">{{skjema.pasta}}</td><td class="con">{{PASTAPRIS|nok}}</td><td class="out">{{pastatotal|nok}}</td><td colspan="2"></td></tr>
+  <tr><td>Dagens suppe</td><td class="in">{{skjema.suppe}}</td><td class="con">{{SUPPEPRIS|nok}}</td><td class="out">{{suppetotal|nok}}</td><td colspan="2"></td></tr>
+  <tr><td>Dagens bagett</td><td class="in">{{skjema.bagett}}</td><td class="con">{{BAGETTPRIS|nok}}</td><td class="out">{{bagettotal|nok}}</td><td colspan="2"></td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><td>Sum</td><td class="out">{{antall}}</td><td></td><td class="out">{{subtotal|nok}}</td><td colspan="2"></td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><td colspan="2"></td><td>Rabatt (kroner)</td><td class="out">{{rabatt|nok}}</td><td colspan="2"></td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><th>Levering<th><td colspan="5"></td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><td>Antall km</td><td class="in">{{skjema.avstand}}</td>  <td></td><td>Pris for levering</td><td class="out">{{levering|nok}}</td><td></td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><td colspan="6">&nbsp;</td></tr>
+  <tr><td>Å betale totalt</td><td class="out">{{total|nok}}</td><td colspan="4"></td></tr>
+</table>
+
+<div style='background: #ffffff; padding: .1rem;'>
+{% if skjema.errors %}
+  <ul class="flash">
+    {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
+      {% for error in field_errors %}
+        <li>{{ skjema[field_name].label }}: {{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+{% endif %}
+<p>{{skjema.bestill(style='all: revert;')}}</p>
+</form>
+</div>
+</body>
+</html>

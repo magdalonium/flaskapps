@@ -1,0 +1,43 @@
+{% extends "1Pv20_base.html" %}
+{% block content %}
+<h1>{% block title %}Provisjonskalkulator{% endblock %}</h1>
+<form method='GET'>
+<table class='regneark'>
+    <tr>
+        <th>Kunde</th>
+        <th>Antall kilogram</th>
+        <th>Kostpris per kilogram</th>
+        <th>Salgspris per kilogram</th>
+        <th>Differanse i kroner</th>
+        <th>Differanse i prosent</th>
+        <th>Sats</th>
+        <th>Provisjon</th>
+    </tr>
+{% for i in range(skjema.kunder|length) %}
+    <tr>
+            <td>{{skjema.kunder[i].navn}}</td>
+            <td>{{skjema.kunder[i].mengde}}</td>
+            <td>{{skjema.kunder[i].kostpris}}</td>
+            <td>{{skjema.kunder[i].salgspris}}</td>
+            {% if utdata[i] %}
+            <td>{{ utdata[i].differanse }}</td>
+            <td>{{ utdata[i].prosent|round(3) }}</td>
+            <td>{{ utdata[i].sats }}</td>
+            <td>{{ utdata[i].provisjon }}</td>
+            {% else %}
+                {% for i in range(4) %}
+                    <td></td>
+                {% endfor %}
+            {% endif %}
+    </tr>
+{% endfor %}
+<tr>
+    <td colspan='6'></td>
+    <td>Sum</td>
+    <td>{{total}}</td>
+</tr>
+</table>
+{{skjema.beregn}}
+</form>
+</input>
+{% endblock %}

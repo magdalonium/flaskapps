@@ -1,0 +1,64 @@
+{% extends "1Pv20_base.html" %}
+{% block head %}
+    <style>
+        .beregning { background: #7cbf9d }
+        input.smal { width: 4rem }
+        input.midtstilt { text-align: center }
+        td.venstrejustert {text-align: left }
+        span.venstrejustert {float: left }
+        td.rammeløs {border: none}
+    </style>
+{% endblock %}
+{% block content %}
+<h1>{% block title %}Provisjonskalkulator{% endblock %}</h1>
+<form method='GET'>
+<table class='regneark'>
+    <tr>
+        <th>Provisjon</th>
+        <td class='venstrejustert'>{{ skjema.lav.label }}</td>
+        <td>{{ skjema.lav(class="smal") }} %</td>
+        <td class='venstrejustert'>{{ skjema.høy.label }}</td>
+        <td>{{ skjema.høy(class="smal") }} %</td>
+    </tr>
+</table>
+<table class='regneark'>
+    <tr>
+        <th>Kunde</th>
+        <th>Antall kilogram</th>
+        <th>Kostpris per kilogram</th>
+        <th>Salgspris per kilogram</th>
+        <th>Differanse i kroner</th>
+        <th>Differanse i prosent</th>
+        <th>Sats</th>
+        <th>Provisjon</th>
+    </tr>
+{% for i in range(skjema.kunder|length) %}
+    <tr>
+            <td>{{skjema.kunder[i].navn(class="midtstilt")}}</td>
+            <td>{{skjema.kunder[i].mengde}}</td>
+            <td><span class='venstrejustert'>kr</span>{{skjema.kunder[i].kostpris(class="smal")}}</td>
+            <td><span class='venstrejustert'>kr</span>{{skjema.kunder[i].salgspris(class="smal")}}</td>
+            {% if utdata[i] %}
+            <td class='beregning'>{{ utdata[i].differanse|nok }}</td>
+            <td class='beregning'>{{ utdata[i].prosent|pst }}</td>
+            <td class='beregning'>{{ utdata[i].sats|pst }}</td>
+            <td class='beregning'>{{ utdata[i].provisjon|nok }}</td>
+            {% else %}
+                {% for i in range(4) %}
+                    <td class='beregning'></td>
+                {% endfor %}
+            {% endif %}
+    </tr>
+{% endfor %}
+<tr>
+    <td colspan='6' class='rammeløs'></td>
+    <td class='venstrejustert'>Sum</td>
+    <td class=beregning>{{total|nok if total}}</td>
+</tr>
+</table>
+{% for knapp in skjema if knapp.type=="SubmitField" %}
+    {{ knapp }}
+{% endfor %}
+</form>
+</input>
+{% endblock %}

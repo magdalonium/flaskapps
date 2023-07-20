@@ -39,6 +39,7 @@ h4 {background: #fbb4ae;}
 h5 {background: #decbe4;}
 h6 {background: #ffffb3;}
 
+
 hr {
     border-style: dashed;
     padding: 0;
@@ -181,3 +182,6 @@ dt {
   clear: left;
   margin-right: 1em;
 }
+
+:is(h3, h4, h5, h6, h7) a {text-decoration: unset;}
+

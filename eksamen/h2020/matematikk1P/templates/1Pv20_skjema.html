@@ -1,0 +1,45 @@
+{% extends "1Pv20_base.html" %}
+{% block content %}
+<p>{{output}}</p>
+<hr>
+
+{% if skjema.errors %}
+    <ul class="flash">
+        {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <li>{{ skjema[field_name].label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<form method='GET'>
+<table class='regneark'>
+    <tr>
+        {% for kolonne in skjema.kunder[0] %}
+        <th>{{kolonne.label.text}}</th>
+        {% endfor %}
+        {% for kolonne in ["Differanse i kroner", "Differanse i prosent", "Sats", "Provisjon"] %}
+        <th>{{kolonne}}</th>
+        {% endfor %}
+    </tr>
+{% for i in range(skjema.kunder.last_index + 1) %}
+    <tr>
+        {% for celle in skjema.kunder[i] %}
+            <td>{{celle}}</td>
+        {% endfor %}
+        {% for k in ["differanse",  "prosent", "sats", "provisjon"] %}
+            <td class='beregning'>{{ output[i][k]|round(2) if output[i][k] }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+<tr>
+    <td colspan='6'></td>
+    <td>Sum</td>
+    <td class=beregning>{{total}}</td>
+</tr>
+</table>
+{{skjema.beregn}}
+</form>
+</input>
+{% endblock %}

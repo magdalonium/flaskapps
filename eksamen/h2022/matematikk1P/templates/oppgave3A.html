@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>1P høst 2022: Del 1 - {{tittel}}</h1>
+
+<form method='GET'>
+<p>
+  {{skjema.modell.label}}
+  {{skjema.modell}}
+  </p>
+<table class='regneark'>
+  <tr>
+    <th>x</th>
+    {% for x in skjema.X %}
+      <td>{{x}}</td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <th>y</th>
+    {% for y in skjema.Y %}
+      <td>{{y}}</td>
+    {% endfor %}
+  </tr>
+</table>
+<p>Nye x-verdier:
+    {% for n in skjema.nye %}
+      {{n(class="tall")}}
+    {% endfor %}
+</p>
+<p>
+  {% for felt in skjema if felt.type=='SubmitField' %}
+    {{ felt }}
+  {% endfor %}
+</p>
+</form>
+
+{% if utdata %}<hr>
+<p>Funksjon: {{utdata.uttrykk}}</p>
+{{utdata.tegning}}
+<ul>
+  {% for fv in utdata.funksjonsverdier %}
+    <li>
+      f({{fv[0]}}) = {{ fv[1]|round(2) if fv[1] else "Udefinert"}}
+    {% if not fv[2] %}<i>(Komplekst tall)</i>{% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

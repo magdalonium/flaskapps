@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>1P høst 2022: Del 1 - {% block title %}Oppgave 1{% endblock %}</h1>
+
+{% if skjema %}
+  {% if skjema.errors %}
+    <ul class="error">
+      {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
+        {% for error in field_errors %}
+          <li>{{ skjema[field_name].label }}: {{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form method='GET'>
+    <table class='regneark'>
+      <tr>
+        <th>Årstall</th>
+        <th>Sats(‰)</th>
+      </tr>
+      {% for sats in skjema.satser %}
+        <tr>
+          <td>{{sats.år}}</td>
+          <td>{{sats.verdi}}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <table class='regneark'>
+      <tr>
+        <th>Familie</th>
+        <th>Verdi</th>
+        {% for sats in skjema.satser %}
+          <th>{{sats.år.data}}</th>
+        {% endfor %}
+      </tr>
+      {% for bolig in skjema.boliger %}
+        <tr>
+          <td>{{bolig.familie}}</td>
+          <td>{{bolig.likningsverdi}}</td>
+          {% for skatt in utdata[bolig.familie.data] %}
+            <td>{{skatt}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+    <p>
+      {% for felt in skjema if felt.type=='SubmitField' %}
+        {{ felt }}
+      {% endfor %}
+    </p>
+  </form>
+
+{% endif %}
+{% endblock %}

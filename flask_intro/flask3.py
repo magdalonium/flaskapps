@@ -52,8 +52,78 @@ def show_fancykvadrat(tall):
                                    utdata = tall**2)
 
 #Tillegg
-from flask import render_template
-@app.route('/stigenerator')
-def show_stigenerator():
-    utdata = [None]
-    return render_template("default.html", tittel = "Flask del 8: Mer om Jinja-uttrykk", utdata=utdata)
+from flask import render_template, request, url_for
+from wtforms import Form, IntegerField, FloatField, StringField, SubmitField
+from markupsafe import Markup
+
+
+class Inndataskjema(Form):
+    inndata = StringField(default="Barbie")
+    submit = SubmitField("Lag sti")
+
+@app.route('/stigenerator/input')
+def show_inputgenerator():
+    skjema = Inndataskjema(request.args)
+    if skjema.validate():
+      sti = url_for('.show_input_test', inndata = skjema.inndata.data)
+      utdata =  [Markup(f"Prøv å følge stien: <a href='{sti}'>{sti}</a>")]
+    else:
+      utdata = []
+    return render_template("default.html",
+                           tittel="Flask del 3 - Stigenerator",
+                           skjema = skjema,
+                           utdata = utdata)
+
+
+class Multiinputskjema(Form):
+    tekst = StringField(default = "Ken")
+    heltall = IntegerField(default = 42)
+    desimaltall = FloatField(default = 3.14)
+    submit = SubmitField("Lag sti")
+
+@app.route('/stigenerator/multiinput')
+def show_multiinputgenerator():
+    skjema = Multiinputskjema(request.args)
+    if skjema.validate():
+      sti = url_for('.show_multiinputtest',
+                    tekst = skjema.tekst.data,
+                    heltall = skjema.heltall.data,
+                    desimaltall = skjema.desimaltall.data)
+      utdata =  [Markup(f"Prøv å følge stien: <a href='{sti}'>{sti}</a>")]
+    else:
+      utdata = []
+    return render_template("default.html",
+                           tittel="Flask del 3 - Stigenerator",
+                           skjema = skjema,
+                           utdata = utdata)
+
+class Kvadratskjema(Form):
+    tall = IntegerField(default="2")
+    submit = SubmitField("Lag sti")
+
+@app.route('/stigenerator/kvadrat')
+def show_kvadratgenerator():
+    skjema = Kvadratskjema(request.args)
+    if skjema.validate():
+      sti = url_for('.show_kvadrat', tall = skjema.tall.data)
+      utdata =  [Markup(f"Prøv å følge stien: <a href='{sti}'>{sti}</a>")]
+    else:
+      utdata = []
+    return render_template("default.html",
+                           tittel="Flask del 3 - Stigenerator",
+                           skjema = skjema,
+                           utdata = utdata)
+
+@app.route('/stigenerator/fancykvadrat')
+def show_fancykvadratgenerator():
+    skjema = Kvadratskjema(request.args)
+    if skjema.validate():
+      sti = url_for('.show_fancykvadrat', tall = skjema.tall.data)
+      utdata =  [Markup(f"Prøv å følge stien: <a href='{sti}'>{sti}</a>")]
+    else:
+      utdata = []
+    return render_template("default.html",
+                           tittel="Flask del 3 - Stigenerator",
+                           skjema = skjema,
+                           utdata = utdata)
+

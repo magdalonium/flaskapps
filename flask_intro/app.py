@@ -4,6 +4,9 @@ from markupsafe import Markup
 from importlib import import_module
 from inspect import getmembers
 
+SIDETITTEL = "Webapper med Flask"
+INNLEDNING = Markup("Dette er en samling med små webapper")
+BAKGRUNN = "bakgrunn_havnekran.jpg"
 deler = []
 titler = ["Flask del 2 HTML og CSS",
           "Flask del 3 Dynamiske webapper med GET",
@@ -19,6 +22,10 @@ imports = ["flask2", "flask3", "flask4", "flask5",
            "flask10"]
 moduler = []
 
+from collections import defaultdict
+bakgrunnsbilder = defaultdict(lambda: None)
+bakgrunnsbilder["flask2"] = "bakgrunn_maling.jpg"
+
 if __name__ == '__main__':
    for x in imports:
         moduler.append(import_module(x))
@@ -30,6 +37,7 @@ bp = Blueprint('flask_intro', __name__)
 
 def konverter(modul, tittel):
     navn = modul.__name__.split(".")[-1]
+    bakgrunn = bakgrunnsbilder[navn]
     bp = Blueprint(navn, __name__, template_folder='templates')
     for navn, attr in getmembers(modul):
       if navn.split("_", 1)[0] == "filter":
@@ -45,7 +53,8 @@ def konverter(modul, tittel):
             utdata.append(Markup(f"<a href='{rule}'>{rule}</a>"))
           elif not "static" in str(rule).split("/"):
             utdata.append(rule)
-        return render_template("default.html", tittel = tittel, utdata=utdata)
+
+        return render_template("default.html", tittel = tittel, utdata=utdata, bakgrunn=bakgrunn)
     bp.add_url_rule('/innhold', view_func = index)
     for rule in modul.app.url_map.iter_rules():
         bp.add_url_rule(rule.rule, view_func = modul.app.view_functions[rule.endpoint])
@@ -54,16 +63,16 @@ def konverter(modul, tittel):
 
 for modul, tittel in zip(moduler, titler):
     bp.register_blueprint(konverter(modul, tittel),
-                       url_prefix='/' + modul.__name__.split(".")[-1],
+                       url_prefix='/' + modul.__name__.split(".")[-1]
                        )
 
 
 app = Flask(__name__)
 @bp.route('/')
 def vis():
-  utdata = [Markup("<h2>Innledning</h2>"),
-            "pass",
-            Markup("<h2>Innhold</h2>")]
+  innledning = [Markup("<h2>Innledning</h2>"),
+                INNLEDNING]
+  utdata = [Markup("<h2>Innhold</h2>")]
   for modul, tittel in zip(imports, titler):
       utdata.append(Markup(f"<a href='{url_for('.' + modul + '.index')}'>{tittel}</a>"))
   utdata.append(Markup("<h2>Registrerte stier</h2>"))
@@ -74,6 +83,6 @@ def vis():
       utdata.append(Markup(f"<a href='{rule}'>{rule}</a>"))
     elif not "static" in str(rule).split("/"):
       utdata.append(rule)
-  return render_template("default.html", tittel = "Webapper med Flask", utdata=utdata)
+  return render_template("default.html", tittel = SIDETITTEL, innledning = innledning, utdata=utdata, bakgrunn = BAKGRUNN)
 
 app.register_blueprint(bp, url_prefix='/')

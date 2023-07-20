@@ -40,3 +40,24 @@ def show_blokktest():
     return render_template("blokktest.html")
 
 
+#Tillegg
+from flask import request, url_for
+from markupsafe import Markup
+from wtforms import Form, StringField, SubmitField
+
+class Personligskjema(Form):
+    person = StringField(default="Eufemia")
+    submit = SubmitField("Lag sti")
+
+@app.route('/stigenerator/kvadrat')
+def show_personliggenerator():
+    skjema = Personligskjema(request.args)
+    if skjema.validate():
+      sti = url_for('.show_personlig', person = skjema.person.data)
+      utdata =  [Markup(f"Prøv å følge stien: <a href='{sti}'>{sti}</a>")]
+    else:
+      utdata = []
+    return render_template("default.html",
+                           tittel="Flask del 3 - Stigenerator",
+                           skjema = skjema,
+                           utdata = utdata)
