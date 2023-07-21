@@ -4,13 +4,18 @@ from markupsafe import Markup
 from importlib import import_module
 from inspect import getmembers
 
+TITTEL = "Eksamensoppgaver løst med Python"
+UNDERTITTEL = "Matematikk 1P høst 2020"
+BAKGRUNN = None
+
 deler = []
 titler = ["Oppgave 7"]
 imports = ["oppgave7"]
 moduler = []
+
 from collections import defaultdict
 bakgrunnsbilder = defaultdict(lambda: None)
-bakgrunnsbilder["oppgave7"] = "bakgrunn_fiskebåt.jpg"
+bakgrunnsbilder["oppgave7"] = "bilder/bakgrunn/fiskebåt.jpg"
 if __name__ == '__main__':
    for x in imports:
         moduler.append(import_module(x))
@@ -30,8 +35,6 @@ def konverter(modul, tittel):
       if name.split("_", 1)[0] == "filter":
         bp.add_app_template_filter(attr, name.split("_", 1)[1])
     def index():
-        print(navn + '.static')
-        print(url_for('static', filename='default.css'))
         utdata = []
         for rule in modul.app.url_map.iter_rules():
           if rule.endpoint.split(".")[-1] =='show':
@@ -56,7 +59,7 @@ for modul, tittel in zip(moduler, titler):
 app = Flask(__name__)
 @bp.route('/')
 def vis():
-  utdata = []
+  utdata = [Markup(f"<h2>{UNDERTITTEL}</h2>")]
   for modul, tittel in zip(imports, titler):
       utdata.append(Markup(f"<a href='{url_for('.' + modul + '.index')}'>{tittel}</a>"))
   utdata.append(Markup("<h2>Registrerte stier</h2>"))
@@ -67,7 +70,7 @@ def vis():
       utdata.append(Markup(f"<a href='{rule}'>{rule}</a>"))
     elif not "static" in str(rule).split("/"):
       utdata.append(rule)
-  return render_template("default.html", tittel = "Webapper med Flask", utdata=utdata)
+  return render_template("default.html", tittel = TITTEL, utdata=utdata)
 
 app.register_blueprint(bp, url_prefix='/')
 

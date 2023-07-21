@@ -9,7 +9,7 @@ imports = ["oppgave7"]
 moduler = []
 from collections import defaultdict
 bakgrunnsbilder = defaultdict(lambda: None)
-bakgrunnsbilder["oppgave7"] = "bakgrunn_kantine.jpg"
+bakgrunnsbilder["oppgave7"] = "bilder/bakgrunn/kantine.jpg"
 if __name__ == '__main__':
    for x in imports:
         moduler.append(import_module(x))

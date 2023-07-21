@@ -44,8 +44,26 @@ def vis():
       utdata.append(Markup(f"<a href='{url_for(rule.endpoint)}'>{rule}</a>"))
     else:
       utdata.append(rule)
-  return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bakgrunn.jpg')
+  return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
+"""
+import pytest
+client = app.test_client()
+responses = []
+ignores = []
 
+for rule in app.url_map.iter_rules():
+    if not rule.arguments:
+        responses.append(client.get(rule.rule))
+    else:
+        ignores.append(rule)
 
+errors = [resp for resp in responses if resp.status_code != 200]
 
-
+@app.route('/feil')
+def vis_feil():
+    utdata = [Markup("<h2>Feilrapport</h2>")]
+    for err in errors:
+        path, status = err.request.path, err.status
+        utdata.append(Markup(f"<a href='{path}'>{path}: <b>{status}</b></a>"))
+    return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
+"""

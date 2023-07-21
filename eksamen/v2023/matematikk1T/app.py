@@ -12,6 +12,7 @@ deler = []
 titler = ["Del 1"]
 imports = ["del1"]
 moduler = []
+
 from collections import defaultdict
 bakgrunnsbilder = defaultdict(lambda: None)
 bakgrunnsbilder["oppgave7"] = "bakgrunn_løping_jente.jpg"

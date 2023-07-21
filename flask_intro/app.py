@@ -6,7 +6,7 @@ from inspect import getmembers
 
 SIDETITTEL = "Webapper med Flask"
 INNLEDNING = Markup("Dette er en samling med små webapper")
-BAKGRUNN = "bakgrunn_havnekran.jpg"
+BAKGRUNN = "bilder/bakgrunn/havnekran.jpg"
 deler = []
 titler = ["Flask del 2 HTML og CSS",
           "Flask del 3 Dynamiske webapper med GET",
@@ -24,7 +24,7 @@ moduler = []
 
 from collections import defaultdict
 bakgrunnsbilder = defaultdict(lambda: None)
-bakgrunnsbilder["flask2"] = "bakgrunn_maling.jpg"
+bakgrunnsbilder["flask2"] = "bilder/bakgrunn/maling.jpg"
 
 if __name__ == '__main__':
    for x in imports:
@@ -70,19 +70,11 @@ for modul, tittel in zip(moduler, titler):
 app = Flask(__name__)
 @bp.route('/')
 def vis():
-  innledning = [Markup("<h2>Innledning</h2>"),
-                INNLEDNING]
-  utdata = [Markup("<h2>Innhold</h2>")]
+  utdata = [Markup("<h2>Innledning</h2>"),
+            INNLEDNING,
+            Markup("<h2>Innhold</h2>")]
   for modul, tittel in zip(imports, titler):
       utdata.append(Markup(f"<a href='{url_for('.' + modul + '.index')}'>{tittel}</a>"))
-  utdata.append(Markup("<h2>Registrerte stier</h2>"))
-  for rule in app.url_map.iter_rules():
-    if rule.endpoint.split(".")[-1] =='vis':
-        pass
-    elif not rule.arguments:
-      utdata.append(Markup(f"<a href='{rule}'>{rule}</a>"))
-    elif not "static" in str(rule).split("/"):
-      utdata.append(rule)
-  return render_template("default.html", tittel = SIDETITTEL, innledning = innledning, utdata=utdata, bakgrunn = BAKGRUNN)
+  return render_template("default.html", tittel = SIDETITTEL, utdata=utdata, bakgrunn = BAKGRUNN)
 
 app.register_blueprint(bp, url_prefix='/')

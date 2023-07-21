@@ -196,7 +196,7 @@ def vis_output():
             utdata.append(None)
     total = sum([data['provisjon'] for data in utdata if data])
     utdata.append({'Sum': total})
-    return render_template("input.html", skjema=skjema, utdata=utdata)
+    return render_template("1Pv20_input.html", skjema=skjema, utdata=utdata)
 
 
 #%%

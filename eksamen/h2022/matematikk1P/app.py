@@ -11,7 +11,7 @@ imports = ["del1", "oppgave7"]
 moduler = []
 from collections import defaultdict
 bakgrunnsbilder = defaultdict(lambda: None)
-bakgrunnsbilder["oppgave7"] = "bakgrunn_løping_jente.jpg"
+bakgrunnsbilder["oppgave7"] = "bilder/bakgrunn/løping_jente.jpg"
 
 if __name__ == '__main__':
    for x in imports:

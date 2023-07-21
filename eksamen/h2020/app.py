@@ -2,6 +2,10 @@
 from flask import Blueprint, render_template, url_for, Flask
 from markupsafe import Markup
 from importlib import import_module
+
+TITTEL = "Eksamensoppgaver løst med Python"
+UNDERTITTEL = "Høst 2020"
+BAKGRUNN = "bakgrunn_eksamen.jpg"
 titler = ["Matematikk 1P"]
 imports = ["matematikk1P"]
 moduler = []
@@ -22,10 +26,10 @@ for modul in moduler:
 
 @bp.route('/')
 def vis():
-  utdata = []
+  utdata = [Markup(f"<h2>{UNDERTITTEL}</h2>")]
   for navn, tittel in zip(imports, titler):
       utdata.append(Markup(f"<a href='{url_for('.' + navn + '.vis')}'>{tittel}</a>"))
-  return render_template("default.html", tittel="Eksamensoppgaver løst med Python - " + bp.name, utdata=utdata, bakgrunn="bakgrunn_eksamen.jpg")
+  return render_template("default.html", tittel=TITTEL, utdata=utdata, bakgrunn=BAKGRUNN)
 
 app = Flask(__name__)
 app.register_blueprint(bp)
