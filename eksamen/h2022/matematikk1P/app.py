@@ -20,8 +20,9 @@ else:
     for x in imports:
         moduler.append(import_module(".." + x ,__name__))
 
-navn = __file__.split("\\")[-2]
-bp = Blueprint(navn, __name__)
+from pathlib import Path
+navn = Path(__file__).parts[-2]
+bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
 
 def konverter(modul, tittel):
     navn = modul.__name__.split(".")[-1]

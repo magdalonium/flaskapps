@@ -3,12 +3,6 @@ from flask import Blueprint, render_template, url_for, Flask
 from markupsafe import Markup
 from importlib import import_module
 from inspect import getmembers
-import sys
-# add your project directory to the sys.path
-project_home = "F:\\users\\magdalon\\Dropbox\\Documents\\Python\\mysite\\"
-if project_home not in sys.path:
-    sys.path = [project_home] + sys.path
-
 
 deler = []
 titler = ["Oppgave 7"]
@@ -24,11 +18,11 @@ else:
     for x in imports:
         moduler.append(import_module(".." + x ,__name__))
 
-navn = __file__.split("\\")[-2]
+from pathlib import Path
+navn = Path(__file__).parts[-2]
 bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
 
 def konverter(modul, tittel):
-    print(__name__)
     navn = modul.__name__.split(".")[-1]
     bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
     bakgrunn = bakgrunnsbilder[navn]

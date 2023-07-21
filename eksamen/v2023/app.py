@@ -19,8 +19,9 @@ else:
     for x in imports:
         moduler.append(import_module(".." + x + '.app',__name__))
 
-navn = __file__.split("\\")[-2]
-bp = Blueprint(navn, __name__)
+from pathlib import Path
+navn = Path(__file__).parts[-2]
+bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
 
 for modul in moduler:
     bp.register_blueprint(modul.bp, url_prefix='/' + modul.__name__.split(".")[-2])
