@@ -14,10 +14,11 @@ except Exception:
 
 from eksamen.app import bp as bpe
 from flask_intro.app import bp as bpi
-
+from fifa23.app import bp as bpf
 app = Flask(__name__)
 app.register_blueprint(bpe, url_prefix="/eksamen")
 app.register_blueprint(bpi, url_prefix="/python_intro")
+app.register_blueprint(bpf, url_prefix="/fifa23")
 
 eksamenssett = [('eksamen.h2020.matematikk1P.oppgave7.index', 'Matematikk 1P høst 2020: Oppgave 7'),
                 ('eksamen.h2021.matematikk1P.oppgave7.index', 'Matematikk 1P høst 2021: Oppgave 7'),
@@ -32,6 +33,7 @@ def vis():
             Markup("<h2>Prosjekter</h2>"),
             Markup(f"<a href='{url_for('flask_intro.vis')}'>Introduksjon til webapper med Flask</a>"),
             Markup(f"<a href='{url_for('eksamen.vis')}'>Eksamensoppgaver</a>"),
+            Markup(f"<a href='{url_for('fifa23.vis_enkel')}'>VM-kalkulator</a>"),
             Markup("<h2>Eksamensoppgaver</h2>")]
   for ende, tittel in eksamenssett:
       utdata.append(Markup(f"<a href='{url_for(ende)}'>{tittel}</a>"))
@@ -45,6 +47,7 @@ def vis():
     else:
       utdata.append(rule)
   return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
+
 """
 import pytest
 client = app.test_client()
