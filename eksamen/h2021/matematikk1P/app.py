@@ -16,7 +16,7 @@ if __name__ == '__main__':
 else:
     for x in imports:
         moduler.append(import_module(".." + x ,__name__))
-navn = __file__.split("\\")[-2]
+
 from pathlib import Path
 navn = Path(__file__).parts[-2]
 bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
