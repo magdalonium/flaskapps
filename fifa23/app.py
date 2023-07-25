@@ -28,7 +28,13 @@ from pathlib import Path
 
 NETTSTEDTITTEL = "VM-kalkulator"
 INNLEDNING = [Markup("<p>Denne webappen bruker lagenes <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>Fifa-rating</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball-VM for kvinner.</p>"),
-              Markup("<p>Jeg har tidligere gjort de samme beregningene for Fotball-VM for herrer i Quatar: <a href='https://magdalon.wordpress.com/2022/12/03/hvem-vinner-vm/'>Hvem vinner VM?</a></p>")]
+              Markup("<p>Jeg har tidligere gjort de samme beregningene for Fotball-VM for herrer i Quatar: <a href='https://magdalon.wordpress.com/2022/12/03/hvem-vinner-vm/'>Hvem vinner VM?</a></p>"),
+              Markup("<h3>Teori</h3>"),
+              Markup("<p>Vi finner sannsynligheten <i>p</i> for at lag 1 vinner med formelen:</p>"),
+              Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mn>10</mn><mrow><mo>-</mo><mfrac><mi>x</mi><mn>2</mn></mfrac></mrow></msup></mrow></mfrac></mrow></math></p>"),
+              Markup("<p>Hvor <i>x</i> avhenger av forholdet mellom rankingen til de to lagene:</p>"),
+              Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>x</mi><mo>=</mo><mrow><mrow><mfrac><msub><mi>R</mi><mi>1</mi></msub><mn>200</mn></mfrac></mrow><mo>-</mo><mrow><mfrac><msub><mi>R</mi><mi>2</mi></msub><mn>200</mn></mfrac></mrow></mrow></mrow></math></p>"),
+              Markup("<p> Siden vi ser på utslagsrundene ser vi vekk i fra sannsynligheten for uavgjort, så sannsynligheten for at lag 2 vinner blir <i>1 - p</i>.</p>")]
 
 navn = Path(__file__).parts[-2]
 bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
