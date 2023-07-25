@@ -139,7 +139,24 @@ df.rank().plot.scatter(x='poeng', y=p1)
 for idx, row in df.rank().iterrows():
     plt.annotate(idx, (row['poeng'], row[p1]))
 plt.axline((0,0), slope=1, color="black", linestyle="--")
-
+plt.show()
 print((1-df[p1])/df[p1])
 print(((1-df[p1])/df[p1]))
 
+import matplotlib.pyplot as plt
+plt.rcParams['figure.figsize'] = 5.7, 4
+plt.rcParams.update({'font.size': 14})
+df[p1].sort_values().plot.barh(color="pink", width=0.8,title="VM kvinner (Australia og New Zealand)")
+plt.xlim(0, 0.35)
+plt.show()
+
+
+#%%
+
+from sympy import symbols, Eq
+
+p,x, R1, R2 = symbols(["p","x", "R1", "R2"])
+
+likn1 = Eq(x, (R1-R2)/200)
+likn2 = Eq(p, 1/(1 + 10**(-x/2)))
+likn3 = likn2.subs(x, likn1.rhs)

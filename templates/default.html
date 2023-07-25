@@ -47,14 +47,16 @@
 
 </nav>
 {% if innledning %}
+    <h3>Innledning</h3>
     {% for avsnitt in innledning %}
-        <p>{{avsnitt}}</p>
+        {{avsnitt}}
     {% endfor %}
-    <hr>
 {% endif %}
 
 {% block skjema %}
+
 {% if skjema %}
+  <h3>Input</h3>
   {% if skjema.errors %}
     <ul class="error">
       {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
@@ -72,10 +74,12 @@
       </p>
     {% endfor %}
   </form>
-  <hr>
 {% endif %}
 {% endblock %}
 {% block output %}
+{% if utdata %}
+    <h3>Resultat</h3>
+{% endif %}
 {% if utdata is mapping %}
   <dl>
   {% for k, v in utdata.items() %}
@@ -84,10 +88,10 @@
   </dl>
 {% elif utdata is iterable %}
   {% for data in utdata %}
-    <p>{{data}}</p>
+    {{data}}
   {% endfor %}
 {% else %}
-  <p>{{utdata}}</p>
+  {{utdata}}
 {% endif %}
 {% endblock %}
 {% endblock %}

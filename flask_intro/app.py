@@ -5,7 +5,7 @@ from importlib import import_module
 from inspect import getmembers
 
 SIDETITTEL = "Webapper med Flask"
-INNLEDNING = Markup("Dette er en samling med små webapper")
+INNLEDNING = Markup("<p>Dette er en samling med små webapper.</p>")
 BAKGRUNN = "bilder/bakgrunn/havnekran.jpg"
 deler = []
 titler = ["Flask del 2 HTML og CSS",
@@ -48,9 +48,9 @@ def konverter(modul, tittel):
           if rule.endpoint.split(".")[-1] =='show':
             pass
           elif not rule.arguments:
-            utdata.append(Markup(f"<a href='{url_for('.' + rule.endpoint)}'>{rule}</a>"))
+            utdata.append(Markup(f"<p><a href='{url_for('.' + rule.endpoint)}'>{rule}</a></p>"))
           elif (rule.defaults and rule.arguments.issubset(rule.defaults.keys())):
-            utdata.append(Markup(f"<a href='{rule}'>{rule}</a>"))
+            utdata.append(Markup(f"<p><a href='{rule}'>{rule}</a></p>"))
           elif not "static" in str(rule).split("/"):
             utdata.append(rule)
 
@@ -70,11 +70,10 @@ for modul, tittel in zip(moduler, titler):
 app = Flask(__name__)
 @bp.route('/')
 def vis():
-  utdata = [Markup("<h2>Innledning</h2>"),
-            INNLEDNING,
-            Markup("<h2>Innhold</h2>")]
+  innledning = [INNLEDNING,
+            Markup("<h3>Innhold</h3>")]
   for modul, tittel in zip(imports, titler):
-      utdata.append(Markup(f"<a href='{url_for('.' + modul + '.index')}'>{tittel}</a>"))
-  return render_template("default.html", tittel = SIDETITTEL, utdata=utdata, bakgrunn = BAKGRUNN)
+      innledning.append(Markup(f"<p><a href='{url_for('.' + modul + '.index')}'>{tittel}</a></p>"))
+  return render_template("default.html", tittel = SIDETITTEL, innledning=innledning, bakgrunn = BAKGRUNN)
 
 app.register_blueprint(bp, url_prefix='/')

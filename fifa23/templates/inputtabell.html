@@ -1,6 +1,7 @@
 {% extends "default.html" %}
 {% block skjema %}
 {% if skjema %}
+  <h3>Input</h3>
   {% if skjema.errors %}
     <ul class="error">
       {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
@@ -29,7 +30,6 @@
 </table>
 {{skjema.beregn}}
   </form>
-  <hr>
 {% endif %}
 
 {% endblock %}

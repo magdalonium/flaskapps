@@ -28,16 +28,20 @@ eksamenssett = [('eksamen.h2020.matematikk1P.oppgave7.index', 'Matematikk 1P hø
 
 @app.route('/')
 def vis():
-  utdata = [Markup("<h2>Innledning</h2>"),
-            Markup("Dette er en side jeg har satt sammen for å vise webapper laget med <a href='https://flask.palletsprojects.com/'>Flask</a>. Forklaringer finner du på hjemmesiden min: <a href='https://magdalon.wordpress.com/tag/flask/'>Magdalons syn på verden</a>"),
-            Markup("<h2>Prosjekter</h2>"),
-            Markup(f"<a href='{url_for('flask_intro.vis')}'>Introduksjon til webapper med Flask</a>"),
-            Markup(f"<a href='{url_for('eksamen.vis')}'>Eksamensoppgaver</a>"),
-            Markup(f"<a href='{url_for('fifa23.vis_søyle')}'>VM-kalkulator</a>"),
-            Markup("<h2>Eksamensoppgaver</h2>")]
+  innledning = [Markup("<p>Dette er en side jeg har satt sammen for å vise webapper laget med <a href='https://flask.palletsprojects.com/'>Flask</a>. Forklaringer finner du på hjemmesiden min: <a href='https://magdalon.wordpress.com/tag/flask/'>Magdalons syn på verden</a></p>"),
+                Markup("<h3>Prosjekter</h2>"),
+            Markup(f"<p><a href='{url_for('flask_intro.vis')}'>Introduksjon til webapper med Flask</a></p>"),
+            Markup(f"<p><a href='{url_for('eksamen.vis')}'>Eksamensoppgaver</a></p>"),
+            Markup(f"<p><a href='{url_for('fifa23.vis')}'>VM-kalkulator</a></p>"),
+            Markup("<h3>Eksamensoppgaver</h2>"),
+            Markup("<ul>")]
   for ende, tittel in eksamenssett:
-      utdata.append(Markup(f"<a href='{url_for(ende)}'>{tittel}</a>"))
-  return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
+      innledning.append(Markup(f"<li><a href='{url_for(ende)}'>{tittel}</a></li>"))
+  innledning.append(Markup("</ul>"))
+  return render_template("default.html",
+                         tittel="Magdalons lekegrind",
+                         innledning=innledning,
+                         bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
 
 """
   utdata.append(Markup("<h2>Registrerte stier</h2>"))
