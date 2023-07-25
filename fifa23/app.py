@@ -156,13 +156,20 @@ from pprint import pprint
 
 defaultdata = ImmutableMultiDict([('resultat-0-0', 'Norge'), ('resultat-0-1', 'Sveits'),('resultat-1-0', 'Canada'), ('resultat-1-1', 'Australia'), ('resultat-2-0', 'Spania'),('resultat-2-1', 'Japan'), ('resultat-3-0', 'England'), ('resultat-3-1', 'Danmark'),('resultat-4-0', 'USA'), ('resultat-4-1', 'Nederland'), ('resultat-5-0', 'Frankrike'),('resultat-5-1', 'Brasil'), ('resultat-6-0', 'Sverige'), ('resultat-6-1', 'Italia'),('resultat-7-0', 'Tyskland'), ('resultat-7-1', 'Sør-Korea'), ('beregn', 'Beregn')])
 
+
+from wtforms.validators import data_required, ValidationError
 vinnere = [gruppe[0] for gruppe in grupper.values()]
 toere = [gruppe[1] for gruppe in grupper.values()]
 default = list(zip(vinnere, toere))
-def lag_tabellskjema(ra):
+def lag_tabellskjema(ra=defaultdata):
     class Tabellskjema(Form):
-        resultat = FieldList(FieldList(SelectField(coerce=str), min_entries=2), min_entries=8, default=default)
+        resultat = FieldList(FieldList(SelectField(coerce=str, validators=[data_required()]), min_entries=2), min_entries=8, default=default)
         beregn = SubmitField('Beregn')
+        def validate_resultat(form, field):
+            for w, r in field.data:
+                if w ==r:
+                    raise ValidationError("Gruppevinner og gruppetoer er samme lag!")
+
     skjema = Tabellskjema(ra)
     for i, gruppe in enumerate(grupper.values()):
         for j in range(2):
@@ -224,11 +231,13 @@ def forbered_søyle(resultat, **kwargs):
 @bp.route('/')
 @bp.route('/søyle')
 def vis_søyle():
+    #print(request.args)
     skjema = lag_tabellskjema(request.args)
     if skjema.validate():
       utdata = forbered_søyle(**skjema.data)
     else:
-      utdata = []
+      skjema = lag_tabellskjema()
+      utdata = forbered_søyle(**skjema.data)
     return render_template("inputtabell.html",
                            tittel=NETTSTEDTITTEL,
                            innledning=INNLEDNING,
