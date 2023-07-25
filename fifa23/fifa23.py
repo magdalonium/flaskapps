@@ -68,7 +68,7 @@ v, r = zip(*[sorted(gruppe, key=score.get, reverse=True)[:2] for gruppe in grupp
 
 #%%
 def p(score1, score2):
-    return 1/(10**(-(score1 - score2)/200) + 1)
+    return 1/(10**(-(score1 - score2)/400) + 1)
 
 lag = [v[0], r[2],
        v[2], r[0],
@@ -147,7 +147,8 @@ import matplotlib.pyplot as plt
 plt.rcParams['figure.figsize'] = 5.7, 4
 plt.rcParams.update({'font.size': 14})
 df[p1].sort_values().plot.barh(color="pink", width=0.8,title="VM kvinner (Australia og New Zealand)")
-plt.xlim(0, 0.35)
+plt.xlim(0, 0.25)
+plt.grid(True, axis='x')
 plt.show()
 
 
