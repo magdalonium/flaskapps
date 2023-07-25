@@ -33,11 +33,13 @@ def vis():
             Markup("<h2>Prosjekter</h2>"),
             Markup(f"<a href='{url_for('flask_intro.vis')}'>Introduksjon til webapper med Flask</a>"),
             Markup(f"<a href='{url_for('eksamen.vis')}'>Eksamensoppgaver</a>"),
-            Markup(f"<a href='{url_for('fifa23.vis_enkel')}'>VM-kalkulator</a>"),
+            Markup(f"<a href='{url_for('fifa23.vis_søyle')}'>VM-kalkulator</a>"),
             Markup("<h2>Eksamensoppgaver</h2>")]
   for ende, tittel in eksamenssett:
       utdata.append(Markup(f"<a href='{url_for(ende)}'>{tittel}</a>"))
+  return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
 
+"""
   utdata.append(Markup("<h2>Registrerte stier</h2>"))
   for rule in app.url_map.iter_rules():
     if rule.endpoint.split(".")[-1] =='vis':
@@ -46,7 +48,7 @@ def vis():
       utdata.append(Markup(f"<a href='{url_for(rule.endpoint)}'>{rule}</a>"))
     else:
       utdata.append(rule)
-  return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
+"""
 
 """
 import pytest

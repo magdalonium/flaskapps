@@ -1,0 +1,35 @@
+{% extends "default.html" %}
+{% block skjema %}
+{% if skjema %}
+  {% if skjema.errors %}
+    <ul class="error">
+      {% for field_name, field_errors in skjema.errors|dictsort if field_errors %}
+        {% for error in field_errors %}
+          <li>{{ skjema[field_name].label }}: {{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form method='GET'>
+<table>
+<tr>
+    <td></td>
+    <td>Vinner</td>
+    <td>Toer</td>
+</tr>
+{% for gruppe in skjema.resultat %}
+<tr>
+    <td>Gruppe {{"ABCDEFGH"[loop.index0]}}</td>
+    {% for plassering in gruppe %}
+        <td>{{plassering}}</td>
+    {% endfor %}
+</tr>
+{% endfor %}
+
+</table>
+{{skjema.beregn}}
+  </form>
+  <hr>
+{% endif %}
+
+{% endblock %}

@@ -83,12 +83,18 @@ poeng = [score[l] for l in lag]
 
 #%%
 
+pg = 'Videre fra gruppespill'
+p8 = 'Vinner åttendedelsfinale'
+pq = 'Vinner kvartfinale'
+ps = 'Vinner semifinale'
+p1 = 'Vinner VM'
+
 df = pd.DataFrame({'poeng' : poeng,
-                   'pg' : 1,
-                   'p8' : 0,
-                   'pq' : 0,
-                   'ps' : 0,
-                   'p1' : 0},
+                   pg : 1,
+                   p8 : 0,
+                   pq : 0,
+                   ps : 0,
+                   p1 : 0},
                   index = lag)
 
 #For å finne sannsynlighetene må vi gå gjennom listen og bruke formelen for total sannsynlighet. For å finne vinneren i 8.delsfinalen er det relativt rett fram.
@@ -96,8 +102,8 @@ df = pd.DataFrame({'poeng' : poeng,
 for i in range(8):
     a = df.index[2*i] #Det første laget
     b = df.index[2*i + 1] #Det andre laget
-    df.at[a, 'p8'] += df.at[a,'pg']*df.at[b,'pg']*p(df.at[a, 'poeng'], df.at[b, 'poeng'])
-    df.at[b, 'p8'] += df.at[a,'pg']*df.at[b,'pg']*p(df.at[b, 'poeng'], df.at[a, 'poeng'])
+    df.at[a, p8] += df.at[a, pg]*df.at[b, pg]*p(df.at[a, 'poeng'], df.at[b, 'poeng'])
+    df.at[b, p8] += df.at[a, pg]*df.at[b, pg]*p(df.at[b, 'poeng'], df.at[a, 'poeng'])
 
 #For de videre finalene er det litt mer komplisert. For kvartfinalene må vi se på grupper av fire lag for å regne ut sannsynlighetene, for semifinale må vi se på grupper av 8 lag, og for finalen må vi se på alle lagene. For hvert steg tar vi utgangspunkt i sannsynlighetene i det forrige steget.
 
@@ -115,25 +121,25 @@ for n in range(1, 4):
 
 #Til slutt får vi et resultat.
 
-print(df)
+print(df.round(3))
 
 #Som vi kan fremstille grafisk.
 
-df.p1.plot.barh()
+df[p1].plot.barh()
 
 #%%
-df.plot.scatter(x='poeng', y='p1')
+df.plot.scatter(x='poeng', y=p1)
 for idx, row in df.iterrows():
-    plt.annotate(idx, (row['poeng'], row['p1']))
+    plt.annotate(idx, (row['poeng'], row[p1]))
 
-print(df[['poeng','p1']].rank(ascending=False))
-print(df[['poeng','p1']].rank(ascending=False).diff(axis=1))
+print(df[['poeng',p1]].rank(ascending=False))
+print(df[['poeng',p1]].rank(ascending=False).diff(axis=1))
 
-df.rank().plot.scatter(x='poeng', y='p1')
+df.rank().plot.scatter(x='poeng', y=p1)
 for idx, row in df.rank().iterrows():
-    plt.annotate(idx, (row['poeng'], row['p1']))
+    plt.annotate(idx, (row['poeng'], row[p1]))
 plt.axline((0,0), slope=1, color="black", linestyle="--")
 
-print((1-df.p1)/df.p1)
-print(np.floor((1-df.p1)/df.p1))
+print((1-df[p1])/df[p1])
+print(((1-df[p1])/df[p1]))
 

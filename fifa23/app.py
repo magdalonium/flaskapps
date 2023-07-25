@@ -27,7 +27,7 @@ from markupsafe import Markup
 from pathlib import Path
 
 NETTSTEDTITTEL = "VM-kalkulator"
-
+INNLEDNING = [Markup("Denne webappen bruker <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>Fifa-ratingen</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball VM for kvinner.")]
 
 navn = Path(__file__).parts[-2]
 bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
@@ -78,16 +78,21 @@ def p(score1, score2):
 
 rekkefølge = ['A1', 'C2','C1', 'A2', 'E1','G2','G1','E2', 'B1', 'D2', 'D1', 'B2', 'H1', 'F2', 'F1', 'H2']
 
-def beregn(**kwargs):
-    lag = [kwargs[pos] for pos in rekkefølge]
+pg = 'Videre fra gruppe-spill'
+p8 = 'Vinner åttendedels-finale'
+pq = 'Vinner kvart-finale'
+ps = 'Vinner semi-finale'
+p1 = 'Vinner VM'
+
+def beregn(lag):
     poeng = [score[l] for l in lag]
 
     df = pd.DataFrame({'poeng' : poeng,
-                       'pg' : 1,
-                       'p8' : 0,
-                       'pq' : 0,
-                       'ps' : 0,
-                       'p1' : 0},
+                       pg : 1,
+                       p8 : 0,
+                       pq : 0,
+                       ps : 0,
+                       p1 : 0},
                       index = lag)
 
     for n in range(0, 4):
@@ -101,8 +106,13 @@ def beregn(**kwargs):
                     b = df.index[2*offset*i + offset + k]
                     df.at[a, neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[a, 'poeng'], df.at[b, 'poeng'])
                     df.at[b,neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[b, 'poeng'], df.at[a, 'poeng'])
-    return [Markup(f"<p>Det er <b>{df.p1.max():.1%}</b> sannsynlighet for at <b>{df.p1.idxmax()}</b> vinner fotball-VM for kvinner 2023.</p>"),
-            Markup(df.to_html()),
+
+    return df
+
+def forbered_enkel(**kwargs):
+    df = beregn([kwargs[pos] for pos in rekkefølge])
+    return [Markup(f"<p>Det er <b>{df[p1].max():.1%}</b> sannsynlighet for at <b>{df[p1].idxmax()}</b> vinner fotball-VM for kvinner 2023.</p>"),
+            Markup(df.to_html(float_format=lambda x: f"{x:.3f}", justify='center')),
             ]
 
 class Enkeltskjema(Form):
@@ -127,12 +137,120 @@ class Enkeltskjema(Form):
 @bp.route('/enkel')
 def vis_enkel():
     skjema = Enkeltskjema(request.args)
+    print(request.args)
     if skjema.validate():
-      utdata = beregn(**skjema.data)
+      utdata = forbered_enkel(**skjema.data)
     else:
       utdata = []
     return render_template("default.html",
                            tittel=NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
+                           skjema = skjema,
+                           utdata = utdata,
+                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+
+from wtforms import FormField, FieldList, StringField
+from collections import defaultdict
+from werkzeug.datastructures import ImmutableMultiDict
+from pprint import pprint
+
+defaultdata = ImmutableMultiDict([('resultat-0-0', 'Norge'), ('resultat-0-1', 'Sveits'),('resultat-1-0', 'Canada'), ('resultat-1-1', 'Australia'), ('resultat-2-0', 'Spania'),('resultat-2-1', 'Japan'), ('resultat-3-0', 'England'), ('resultat-3-1', 'Danmark'),('resultat-4-0', 'USA'), ('resultat-4-1', 'Nederland'), ('resultat-5-0', 'Frankrike'),('resultat-5-1', 'Brasil'), ('resultat-6-0', 'Sverige'), ('resultat-6-1', 'Italia'),('resultat-7-0', 'Tyskland'), ('resultat-7-1', 'Sør-Korea'), ('beregn', 'Beregn')])
+
+vinnere = [gruppe[0] for gruppe in grupper.values()]
+toere = [gruppe[1] for gruppe in grupper.values()]
+default = list(zip(vinnere, toere))
+def lag_tabellskjema(ra):
+    class Tabellskjema(Form):
+        resultat = FieldList(FieldList(SelectField(coerce=str), min_entries=2), min_entries=8, default=default)
+        beregn = SubmitField('Beregn')
+    skjema = Tabellskjema(ra)
+    for i, gruppe in enumerate(grupper.values()):
+        for j in range(2):
+            skjema.resultat[i][j].choices = gruppe
+        skjema.resultat[i].default = gruppe[0:1]
+    return skjema
+
+skjema = lag_tabellskjema(defaultdata)
+
+def forbered_inputtabell(resultat, **kwargs):
+    lag = [resultat[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
+    df = beregn(lag)
+    return [Markup(f"<p>Det er <b>{df[p1].max():.1%}</b> sannsynlighet for at <b>{df[p1].idxmax()}</b> vinner fotball-VM for kvinner 2023.</p>"),
+            Markup(df.to_html(float_format=lambda x: f"{x:.3f}", justify='center')),
+            ]
+
+@bp.route('/inputtabell')
+def vis_inputtabell():
+    skjema = lag_tabellskjema(request.args)
+    if skjema.validate():
+      utdata = forbered_inputtabell(**skjema.data)
+    else:
+      utdata = []
+    return render_template("inputtabell.html",
+                           tittel=NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
+                           skjema = skjema,
+                           utdata = utdata,
+                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+
+from matplotlib.figure import Figure
+import base64
+from io import BytesIO
+def tegn_søylediagram(df):
+    #Setter opp tegnevinduet
+    fig = Figure(figsize=(6, 3), tight_layout=True)
+    ax = fig.subplots()
+
+    #Tegner grafen
+    df[p1].sort_values().plot.barh(ax=ax)
+
+    #Returnerer en img-tag
+    buf = BytesIO()
+    fig.set_size_inches(7, 3)
+    fig.savefig(buf, format="png")
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return Markup(f"<img src='data:image/png;base64,{data}'>")
+
+def forbered_søyle(resultat, **kwargs):
+    lag = [resultat[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
+    df = beregn(lag)
+    return [Markup("<h4>Mest sannsynlige vinner</h4>"),
+            Markup(f"<p>Det er <b>{df[p1].max():.1%}</b> sannsynlighet for at <b>{df[p1].idxmax()}</b> vinner fotball-VM for kvinner 2023.</p>"),
+            Markup("<h4>Kampsannsynligheter</h4>"),
+            Markup(df.to_html(float_format=lambda x: f"{x:.3f}", justify='center')),
+            Markup("<h4>Rangerte vinnersannsynligheter</h4>"),
+            Markup(tegn_søylediagram(df))
+            ]
+
+@bp.route('/søyle')
+def vis_søyle():
+    skjema = lag_tabellskjema(request.args)
+    if skjema.validate():
+      utdata = forbered_søyle(**skjema.data)
+    else:
+      utdata = []
+    return render_template("inputtabell.html",
+                           tittel=NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
+                           skjema = skjema,
+                           utdata = utdata,
+                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+
+
+
+def forbered_bracket(resultat, **kwargs):
+    pass
+
+@bp.route('/bracket')
+def vis_bracket():
+    skjema = lag_tabellskjema(request.args)
+    if skjema.validate():
+      utdata = forbered_inputtabell(**skjema.data)
+    else:
+      utdata = []
+    return render_template("bracket.html",
+                           tittel=NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
                            skjema = skjema,
                            utdata = utdata,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
@@ -144,6 +262,11 @@ def vis():
   for rule in app.url_map.iter_rules():
     if not rule.arguments:
       utdata.append(Markup(f"<a href='{url_for(rule.endpoint)}'>{rule}</a>"))
-  return render_template("default.html", tittel = NETTSTEDTITTEL, utdata=utdata)
+  return render_template("default.html",
+                         tittel = NETTSTEDTITTEL,
+                         innledning=INNLEDNING,
+                         utdata=utdata)
 
 app.register_blueprint(bp)
+
+
