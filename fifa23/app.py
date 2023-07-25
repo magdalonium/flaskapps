@@ -221,7 +221,7 @@ def forbered_søyle(resultat, **kwargs):
             Markup("<h4>Rangerte vinnersannsynligheter</h4>"),
             Markup(tegn_søylediagram(df))
             ]
-
+@bp.route('/')
 @bp.route('/søyle')
 def vis_søyle():
     skjema = lag_tabellskjema(request.args)
@@ -256,7 +256,7 @@ def vis_bracket():
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
 app = Flask(__name__)
-@app.route('/')
+@app.route('/innhold')
 def vis():
   utdata = []
   for rule in app.url_map.iter_rules():
