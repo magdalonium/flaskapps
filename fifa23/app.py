@@ -27,7 +27,7 @@ from markupsafe import Markup
 from pathlib import Path
 
 NETTSTEDTITTEL = "VM-kalkulator"
-INNLEDNING = [Markup("Denne webappen bruker <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>Fifa-ratingen</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball-VM for kvinner.")]
+INNLEDNING = [Markup("Denne webappen bruker lagenes <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>Fifa-rating</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball-VM for kvinner.")]
 
 navn = Path(__file__).parts[-2]
 bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
