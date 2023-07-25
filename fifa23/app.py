@@ -230,11 +230,11 @@ def tegn_søylediagram(df):
 def forbered_søyle(resultat, **kwargs):
     lag = [resultat[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
     df = beregn(lag)
-    return [Markup("<h4>Mest sannsynlige vinner</h4>"),
+    return [Markup("<h4>Mest sannsynlig vinner</h4>"),
             Markup(f"<p>Det er <b>{df[p1].max():.1%}</b> sannsynlighet for at <b>{df[p1].idxmax()}</b> vinner fotball-VM for kvinner 2023.</p>"),
             Markup("<h4>Kampsannsynligheter</h4>"),
-            Markup(df.to_html(float_format=lambda x: f"{x:.3f}",
-                              formatters={rating: lambda x: f"{x:.2f}"},
+            Markup(df.to_html(float_format=lambda x: f"{x:.2f}",
+                              formatters={rating: lambda x: f"{x:.0f}"},
                               justify='center')),
             Markup("<h4>Rangerte vinnersannsynligheter</h4>"),
             Markup(tegn_søylediagram(df))
