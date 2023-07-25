@@ -9,7 +9,7 @@
         <meta property='og:title' content='{{tittel}}' />
     {% endif %}
     {% if innledning %}
-        <meta name='og:description' content="{{innledning[0]}}" />
+        <meta property='og:description' content="{{innledning[0]}}" />
     {% endif %}
     {% if bakgrunn %}
       <style>
@@ -19,8 +19,9 @@
                background-position: center;}
          body {background-color: rgba(255,255,255,.90);}
       </style>
-      <meta property='og:image' content='url({{url_for('static', filename=bakgrunn)}}'>
+      <meta property='og:image' content='{{url_for('static', filename=bakgrunn, _external=True)}}'>
     {% endif %}
+    <meta property='og:url' content ='{{url_for(request.endpoint, _external=True)}}'
     {% block head %}{% endblock %}
   </head>
   <body>
