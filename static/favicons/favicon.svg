@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="2.194ex"
+   height="2.176ex"
+   style="vertical-align: -0.338ex;"
+   viewBox="0 -791.3 944.5 936.9"
+   role="img"
+   focusable="false"
+   aria-labelledby="MathJax-SVG-1-Title"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="favicon.svg"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.69095554"
+     inkscape:cx="296.69058"
+     inkscape:cy="538.38486"
+     inkscape:window-width="1638"
+     inkscape:window-height="1266"
+     inkscape:window-x="3298"
+     inkscape:window-y="418"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <title
+     id="MathJax-SVG-1-Title">\mathbb {M} </title>
+  <defs
+     aria-hidden="true"
+     id="defs1">
+    <path
+       stroke-width="1"
+       id="E1-MJAMS-4D"
+       d="M18 666Q18 677 27 680T73 683H146Q261 683 266 679L465 215Q469 215 566 443Q663 676 668 681Q673 683 790 683H908L915 679Q924 664 915 655Q912 648 897 648Q851 639 835 606L833 346Q833 86 835 79Q838 69 849 58T873 41Q877 40 887 38T901 35Q926 35 926 16Q926 6 915 -1H604L597 3Q588 19 597 28Q600 35 615 35Q660 42 673 68L679 79V339Q679 409 679 443T679 520T679 580T677 597Q646 521 584 375T473 117T424 3Q416 -1 410 -1T401 1Q399 3 273 301L148 599L146 343Q146 86 148 79Q152 69 163 58T186 41Q190 40 200 38T215 35Q226 35 235 28Q244 17 235 3L228 -1H28Q17 4 17 17Q17 35 39 35Q84 42 97 68L104 79V639L88 641Q72 644 53 648Q34 648 26 651T18 666ZM457 166Q451 169 449 171T435 198T404 268T344 412L244 648H157L166 637Q169 633 293 346L413 66Q424 88 435 117L457 166ZM817 646Q817 648 766 648H715V72L708 57Q701 45 697 41L695 37Q695 35 757 35H819L813 46Q802 61 800 76Q797 105 797 346L799 612L804 626Q812 638 815 641L817 646ZM124 42Q119 42 119 38Q119 35 128 35Q132 35 132 36Q125 42 124 42Z" />
+  </defs>
+  <g
+     stroke="currentColor"
+     fill="currentColor"
+     stroke-width="0"
+     transform="matrix(1 0 0 -1 0 0)"
+     aria-hidden="true"
+     id="g1"
+     style="fill:#e0218a;fill-opacity:1;fill-rule:evenodd">
+    <use
+       xlink:href="#E1-MJAMS-4D"
+       x="0"
+       y="0"
+       id="use1"
+       style="fill:#e0218a;fill-opacity:1;fill-rule:evenodd" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>\mathbb {M} </dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

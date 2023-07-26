@@ -3,16 +3,17 @@
   <head>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %}</title>
+    {#<link rel="icon" type="image/png" href='{{url_for("static", filename="favicons/favicon32.png")}}'>#}
+    <link rel="icon" type="image/svg+xml" href='{{url_for("static", filename="favicons/favicon.svg")}}'>
+    <title>{{tittel}}</title>
     <link rel="stylesheet" href="/static/default.css" type="text/css">
     {% if tittel %}
         <meta property='og:title' content='{{tittel}}' />
         <meta name="twitter:text:title" content="{{tittel}}">
-
     {% endif %}
     {% if innledning %}
-        <meta property='og:description' content="{{innledning[0]}}" />
-        <meta name="twitter:description" content="{{innledning[0]}}">
+        <meta property='og:description' content="{{innledning[0]|striptags}}" />
+        <meta name="twitter:description" content="{{innledning[0]|striptags}}">
     {% endif %}
     {% if bakgrunn %}
       <style>
