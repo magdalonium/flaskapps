@@ -190,7 +190,7 @@ def lag_tabellskjema(ra=defaultdata):
         skjema.resultat[i].default = gruppe[0:1]
     return skjema
 
-skjema = lag_tabellskjema(defaultdata)
+tabellskjema = lag_tabellskjema(defaultdata)
 
 def forbered_inputtabell(resultat, **kwargs):
     lag = [resultat[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
@@ -304,6 +304,105 @@ def vis_bracket():
                            utslag = utslag,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
+@bp.route('/inputbracket')
+def vis_inputbracket():
+    skjema = lag_tabellskjema(request.args)
+    if skjema.validate():
+      lag = [skjema.resultat.data[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
+      utslag = lag_bracket(lag)
+      utdata = forbered_søyle(**skjema.data)
+    else:
+        pass
+    return render_template("inputbracket.html",
+                           tittel=NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
+                           utdata = utdata,
+                           skjema = skjema,
+                           utslag = utslag,
+                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+
+#%%
+
+
+
+
+
+nr = np.array([(0,0), (2,1),
+      (2,0), (0,1),
+      (4,0), (6,1),
+      (6,0), (4,1),
+      (1,0), (3,1),
+      (3,0), (1,1),
+      (7,0), (5,1),
+      (5,0), (7,1)])
+
+
+def lag_dynamiskskjema(ra=defaultdata):
+    class Dynamiskskjema(Form):
+        resultat = FieldList(FieldList(SelectField(coerce=str, validators=[data_required()]), min_entries=2), min_entries=8, default=default)
+        kvartfinaler = FieldList(SelectField(coerce=str, validators=[data_required()], default="foo"), min_entries = 8, default = [])
+        semifinaler = FieldList(SelectField(coerce=str, validators=[data_required()]), min_entries = 4)
+        finale = FieldList(SelectField(coerce=str, validators=[data_required()]), min_entries = 4)
+        beregn = SubmitField('Beregn')
+        def validate_resultat(form, field):
+            for w, r in field.data:
+                if w ==r:
+                    raise ValidationError("Gruppevinner og gruppetoer er samme lag!")
+
+    skjema = Dynamiskskjema(ra)
+
+    for i, gruppe in enumerate(grupper.values()):
+        for j in range(2):
+            skjema.resultat[i][j].choices = gruppe
+        skjema.resultat[i].default = gruppe[0:1]
+    lag = [skjema.resultat.data[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
+    print(lag)
+    for i in range(8):
+        print(i)
+        l1, l2 = lag[2*i:2*i + 2]
+        skjema.kvartfinaler[i].choices = [l1, l2] #if p(score[l1], score[l2]) > 0.5 else [l2, l1]
+        print(l1, l2, p(score[l1], score[l2])>0.5)
+        skjema.kvartfinaler.default.append([l1] if p(score[l1], score[l2]) > 0.5 else [l2])
+    return skjema
+"""
+        #skjema.kvartfinaler[i].default = l1 if p(score[l1], score[l2]) > 0.5 else l2
+    for i in range(4):
+        print(i)
+        l1, l2 = skjema.kvartfinaler.default[2*i], skjema.kvartfinaler.default[2*i + 1]
+        skjema.semifinaler[i].choices = [l1, l2]
+        skjema.semifinaler[i].default = l1 if p(score[l1], score[l2]) > 0.5 else l2
+    for i in range(2):
+        print(i)
+        l1, l2 = skjema.semifinaler[2*i].default, skjema.semifinaler[2*i + 1].default
+        skjema.finale[i].choices = [l1, l2]
+        skjema.finale[i].default = l1 if p(score[l1], score[l2]) > 0.5 else l2
+    return skjema
+"""
+dynamiskskjema = lag_dynamiskskjema(defaultdata)
+
+@bp.route('/dynamisk')
+def vis_dynamisk():
+    #skjema = lag_dynamiskskjema(request.args)
+    skjema = lag_dynamiskskjema(defaultdata)
+    if skjema.validate():
+      lag = [skjema.resultat.data[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
+      utslag = lag_bracket(lag)
+      utdata = forbered_søyle(**skjema.data)
+    else:
+        utdata = []
+        utslag = []
+    return render_template("dynamiskbracket.html",
+                           tittel=NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
+                           utdata = utdata,
+                           skjema = skjema,
+                           utslag = utslag,
+                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+
+
+
+
+#%%
 app = Flask(__name__)
 @app.route('/innhold')
 def vis():

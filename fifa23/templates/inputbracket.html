@@ -1,0 +1,40 @@
+{% extends "default.html" %}
+
+{% set rekkefølge = [(0, 0), (2, 1),
+              (2,0), (0, 1),
+              (4,0), (6,1),
+              (6,0), (4,1),
+              (1,0), (3,1),
+              (3,0), (1,1),
+              (7,0), (5,1),
+              (5,0), (7,1)] %}
+
+{% block skjema %}
+
+<h3>Input</h3>
+<form method='GET'>
+<table style='margin-left: auto; margin-right: auto;'>
+    <tr>
+        <th>Åttendedels&shy;finaler</th>
+        <th>Kvart&shy;finaler</th>
+        <th>Semi&shy;finaler</th>
+        <th>Finale</th>
+        <th>Vinner</th>
+    </tr>
+    {% for g, p in rekkefølge %}
+    {% set i = loop.index0 %}
+    <tr>
+        <td>{{skjema.resultat[g][p]}}</td>
+        {% if i % 2 == 0 %}<td rowspan='2'>{{ utslag[1][i//2] }}</td>{% endif %}
+        {% if i % 4 == 0 %}<td rowspan='4'>{{ utslag[2][i//4] }}</td>{% endif %}
+        {% if i % 8 == 0 %}<td rowspan='8'>{{ utslag[3][i//8] }}</td>{% endif %}
+        {% if i % 16 == 0 %}<td rowspan='16'>{{ utslag[4][i//16] }}</td>{% endif %}
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan='5'>{{skjema.beregn(style='width: -webkit-fill-available;')}}</td>
+    </tr>
+
+</table>
+</form>
+{% endblock %}
