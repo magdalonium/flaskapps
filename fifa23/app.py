@@ -43,11 +43,11 @@ score = {'Argentina' : 1682.45,
  'Australia' : 1919.69,
  'Brasil' : 1995.3,
  'Canada' : 1996.34,
- 'Columbia' : 1702.64,
+ 'Colombia' : 1702.64,
  'Costa Rica' : 1596.94,
  'Danmark' : 1866.25,
  'England' : 2040.76,
- 'Filipinene' : 1512.97,
+ 'Filippinene' : 1512.97,
  'Frankrike' : 2026.65,
  'Haiti' : 1475.33,
  'Irland' : 1743.59,
@@ -72,14 +72,14 @@ score = {'Argentina' : 1682.45,
  'Vietnam' : 1648.,
  'Zambia' : 1298.31}
 
-grupper = {'A': ['Norge', 'Sveits', 'New Zealand', 'Filipinene'],
+grupper = {'A': ['Norge', 'Sveits', 'New Zealand', 'Filippinene'],
            'B': ['Canada', 'Australia', 'Irland', 'Nigeria'],
            'C': ['Spania', 'Japan', 'Costa Rica', 'Zambia'],
            'D': ['England', 'Danmark', 'Kina', 'Haiti'],
            'E': ['USA', 'Nederland', 'Portugal', 'Vietnam'],
            'F': ['Frankrike', 'Brasil', 'Jamaica', 'Panama'],
            'G': ['Sverige', 'Italia', 'Argentina', 'Sør-Afrika'],
-           'H': ['Tyskland', 'Sør-Korea', 'Columbia', 'Marokko']}
+           'H': ['Tyskland', 'Sør-Korea', 'Colombia', 'Marokko']}
 def p(score1, score2):
     return 1/(10**(-(score1 - score2)/400) + 1)
 
@@ -120,7 +120,7 @@ def beregn(lag):
                     df.at[a, neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[a, rating], df.at[b, rating])
                     df.at[b,neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[b, rating], df.at[a, rating])
 
-    return df
+    return df.iloc[:,[0, 2, 3, 4, 5]]
 
 def forbered_enkel(**kwargs):
     df = beregn([kwargs[pos] for pos in rekkefølge])
