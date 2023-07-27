@@ -246,7 +246,7 @@ def forbered_søyle(resultat, **kwargs):
             Markup("<h4>Rangerte vinnersannsynligheter</h4>"),
             Markup(tegn_søylediagram(df))
             ]
-@bp.route('/', endpoint='vis')
+
 @bp.route('/søyle')
 def vis_søyle():
     #print(request.args)
@@ -264,22 +264,44 @@ def vis_søyle():
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
 
+def lag_bracket(lag):
+    utslag = [lag]
+    while len(utslag[-1]) > 1:
+        utslag.append([])
+        for i in range(len(utslag[-2])//2):
+            l1, l2 = utslag[-2][2*i: 2*i + 2]
+            r1, r2 = score[l1], score[l2]
+            vinner = l1 if p(r1, r2) > 0.5 else l2
+            utslag[-1].append(vinner)
+    return utslag
 
 def forbered_bracket(resultat, **kwargs):
     pass
 
+
+utslag = [['Norge', 'Japan', 'Spania', 'Sveits', 'USA', 'Italia', 'Sverige', 'Nederland', 'Canada', 'Danmark', 'England', 'Australia', 'Tyskland', 'Brasil', 'Frankrike', 'Sør-Korea'],
+          ['Japan', 'Spania', 'USA', 'Sverige', 'Canada', 'England', 'Tyskland', 'Frankrike'],
+          ['Spania', 'USA', 'England', 'Tyskland'],
+          ['USA', 'Tyskland'],
+          ['USA']]
+
+
+@bp.route('/', endpoint='vis')
 @bp.route('/bracket')
 def vis_bracket():
     skjema = lag_tabellskjema(request.args)
     if skjema.validate():
-      utdata = forbered_inputtabell(**skjema.data)
+      lag = [skjema.resultat.data[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
+      utslag = lag_bracket(lag)
+      utdata = forbered_søyle(**skjema.data)
     else:
-      utdata = []
+        pass
     return render_template("bracket.html",
                            tittel=NETTSTEDTITTEL,
                            innledning=INNLEDNING,
-                           skjema = skjema,
                            utdata = utdata,
+                           skjema = skjema,
+                           utslag = utslag,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
 app = Flask(__name__)

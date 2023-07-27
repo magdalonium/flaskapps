@@ -79,65 +79,52 @@ lag = [v[0], r[2],
        v[7], r[5],
        v[5], r[7]]
 
-poeng = [score[l] for l in lag]
-
-#%%
-
-pg = 'Videre fra gruppespill'
-p8 = 'Vinner åttendedelsfinale'
-pq = 'Vinner kvartfinale'
-ps = 'Vinner semifinale'
+rating = 'FIFA-rating'
+pg = 'Videre fra gruppe-spill'
+p8 = 'Vinner åttendedels-finale'
+pq = 'Vinner kvart-finale'
+ps = 'Vinner semi-finale'
 p1 = 'Vinner VM'
 
-df = pd.DataFrame({'poeng' : poeng,
-                   pg : 1,
-                   p8 : 0,
-                   pq : 0,
-                   ps : 0,
-                   p1 : 0},
-                  index = lag)
+def beregn(lag):
+    df = pd.DataFrame({rating : [score[l] for l in lag],
+                       pg : 1,
+                       p8 : 0,
+                       pq : 0,
+                       ps : 0,
+                       p1 : 0},
+                      index = lag)
 
-#For å finne sannsynlighetene må vi gå gjennom listen og bruke formelen for total sannsynlighet. For å finne vinneren i 8.delsfinalen er det relativt rett fram.
+    for n in range(0, 4):
+        offset = 2**n
+        for i in range(8//offset):
+            forrige = df.columns[n + 1]
+            neste = df.columns[n + 2]
+            for j in range(offset):
+                for k in range(offset):
+                    a = df.index[2*offset*i + j]
+                    b = df.index[2*offset*i + offset + k]
+                    df.at[a, neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[a, rating], df.at[b, rating])
+                    df.at[b,neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[b, rating], df.at[a, rating])
 
-for i in range(8):
-    a = df.index[2*i] #Det første laget
-    b = df.index[2*i + 1] #Det andre laget
-    df.at[a, p8] += df.at[a, pg]*df.at[b, pg]*p(df.at[a, 'poeng'], df.at[b, 'poeng'])
-    df.at[b, p8] += df.at[a, pg]*df.at[b, pg]*p(df.at[b, 'poeng'], df.at[a, 'poeng'])
+    return df
 
-#For de videre finalene er det litt mer komplisert. For kvartfinalene må vi se på grupper av fire lag for å regne ut sannsynlighetene, for semifinale må vi se på grupper av 8 lag, og for finalen må vi se på alle lagene. For hvert steg tar vi utgangspunkt i sannsynlighetene i det forrige steget.
+df = beregn(lag)
 
-for n in range(1, 4):
-    offset = 2**n
-    for i in range(8//offset):
-        forrige = df.columns[n + 1]
-        neste = df.columns[n + 2]
-        for j in range(offset):
-            for k in range(offset):
-                a = df.index[2*offset*i + j]
-                b = df.index[2*offset*i + offset + k]
-                df.at[a, neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[a, 'poeng'], df.at[b, 'poeng'])
-                df.at[b,neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[b, 'poeng'], df.at[a, 'poeng'])
-
-#Til slutt får vi et resultat.
-
-print(df.round(3))
-
-#Som vi kan fremstille grafisk.
 
 df[p1].plot.barh()
 
 #%%
-df.plot.scatter(x='poeng', y=p1)
+df.plot.scatter(x=rating, y=p1)
 for idx, row in df.iterrows():
-    plt.annotate(idx, (row['poeng'], row[p1]))
+    plt.annotate(idx, (row[rating], row[p1]))
 
-print(df[['poeng',p1]].rank(ascending=False))
-print(df[['poeng',p1]].rank(ascending=False).diff(axis=1))
+print(df[[rating, p1]].rank(ascending=False))
+print(df[[rating, p1]].rank(ascending=False).diff(axis=1))
 
-df.rank().plot.scatter(x='poeng', y=p1)
+df.rank().plot.scatter(x=rating, y=p1)
 for idx, row in df.rank().iterrows():
-    plt.annotate(idx, (row['poeng'], row[p1]))
+    plt.annotate(idx, (row[rating], row[p1]))
 plt.axline((0,0), slope=1, color="black", linestyle="--")
 plt.show()
 print((1-df[p1])/df[p1])
@@ -156,8 +143,40 @@ plt.show()
 
 from sympy import symbols, Eq
 
-p,x, R1, R2 = symbols(["p","x", "R1", "R2"])
+pp, x, R1, R2 = symbols(["p","x", "R1", "R2"])
 
 likn1 = Eq(x, (R1-R2)/200)
-likn2 = Eq(p, 1/(1 + 10**(-x/2)))
+likn2 = Eq(pp, 1/(1 + 10**(-x/2)))
 likn3 = likn2.subs(x, likn1.rhs)
+
+#%%
+
+
+def bracket(lag):
+    df = pd.DataFrame({rating : [score[l] for l in lag],
+                       pg : 1,
+                       p8 : 0,
+                       pq : 0,
+                       ps : 0,
+                       p1 : 0},
+                      index = lag)
+
+    for n in range(0, 4):
+        offset = 2**n
+        for i in range(8//offset):
+            forrige = df.columns[n + 1]
+            neste = df.columns[n + 2]
+            for j in range(offset):
+                for k in range(offset):
+                    a = df.index[2*offset*i + j]
+                    b = df.index[2*offset*i + offset + k]
+                    df.at[a, neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[a, rating], df.at[b, rating])
+                    df.at[b, neste] += df.at[a,forrige]*df.at[b,forrige]*p(df.at[b, rating], df.at[a, rating])
+            df[neste] = round(df[neste])
+
+    return df
+
+dfb = bracket(lag)
+
+print(dfb)
+print(dfb.to_string(header=False))

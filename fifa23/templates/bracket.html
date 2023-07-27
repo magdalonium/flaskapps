@@ -1,3 +1,32 @@
 {% extends "inputtabell.html" %}
+
+{% macro flaggland(land) %}
+    {% set flagg = "bilder/miniflagg/"+ land + ".png" %}
+    <span style='margin: 0;float: left; padding: 0;'>
+        <img style='padding: 0; margin: 0.2em; float: left; vertical-align: sub;' src='{{url_for("static", filename=flagg)}}' height='15'>
+        <span style='margin:0; vertical-align: top; padding: 0;'>{{ land }}</span>
+    </span>
+
+{% endmacro %}
 {% block output %}
+{{ super() }}
+<h4>Mest sannsynlig utslagsspill</h4>
+<table style='margin-left: auto; margin-right: auto;'>
+    <tr>
+        <th>Åttendedels&shy;finaler</th>
+        <th>Kvart&shy;finaler</th>
+        <th>Semi&shy;finaler</th>
+        <th>Finale</th>
+        <th>Vinner</th>
+    </tr>
+    {% for i in range(16) %}
+    <tr>
+        <td>{{flaggland(utslag[0][i])}}</td>
+        {% if i % 2 == 0 %}<td rowspan='2'>{{ flaggland(utslag[1][i//2]) }}</td>{% endif %}
+        {% if i % 4 == 0 %}<td rowspan='4'>{{ flaggland(utslag[2][i//4]) }}</td>{% endif %}
+        {% if i % 8 == 0 %}<td rowspan='8'>{{ flaggland(utslag[3][i//8]) }}</td>{% endif %}
+        {% if i % 16 == 0 %}<td rowspan='16'>{{ flaggland(utslag[4][i//16]) }}</td>{% endif %}
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}

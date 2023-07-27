@@ -35,7 +35,7 @@ h1 {
 }
 
 h1, h2, h3, h4, h5, h6, nav {
-    font-family: "San Francisco", "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     border-style: solid;
     line-height: 1;
     margin: -1px, .6em;
@@ -58,7 +58,7 @@ hr {
 }
 
 table {
-    font-family: "San Francisco", "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     border-collapse: collapse;
     margin: 0.3em 0.6em;
     padding: 0.6em;
