@@ -246,7 +246,7 @@ def forbered_søyle(resultat, **kwargs):
             Markup("<h4>Rangerte vinnersannsynligheter</h4>"),
             Markup(tegn_søylediagram(df))
             ]
-
+@bp.route('/', endpoint='vis')
 @bp.route('/søyle')
 def vis_søyle():
     #print(request.args)
@@ -286,7 +286,7 @@ utslag = [['Norge', 'Japan', 'Spania', 'Sveits', 'USA', 'Italia', 'Sverige', 'Ne
           ['USA']]
 
 
-@bp.route('/', endpoint='vis')
+
 @bp.route('/bracket')
 def vis_bracket():
     skjema = lag_tabellskjema(request.args)
