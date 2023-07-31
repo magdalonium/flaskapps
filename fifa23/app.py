@@ -94,9 +94,9 @@ rekkefølge = ['A1', 'C2',
 
 rating = 'FIFA-rating'
 pg = 'Videre fra gruppe-spill'
-p8 = 'Vinner åttendedels-finale'
-pq = 'Vinner kvart-finale'
-ps = 'Vinner semi-finale'
+p8 = 'Videre fra åttendedels-finale'
+pq = 'Videre fra kvart-finale'
+ps = 'Videre fra semi-finale'
 p1 = 'Vinner VM'
 
 def beregn(lag):

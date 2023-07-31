@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, url_for, Flask
+from flask import render_template, url_for, Flask, request
 from markupsafe import Markup
 
 try:
@@ -10,6 +10,8 @@ try:
         sys.path = [project_home] + sys.path
 except Exception:
     pass
+
+NETTSTEDTITTEL = "Magdalons lekegrind"
 
 
 from eksamen.app import bp as bpe
@@ -39,7 +41,7 @@ def vis():
       innledning.append(Markup(f"<li><a href='{url_for(ende)}'>{tittel}</a></li>"))
   innledning.append(Markup("</ul>"))
   return render_template("default.html",
-                         tittel="Magdalons lekegrind",
+                         tittel= NETTSTEDTITTEL,
                          innledning=innledning,
                          bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
 
@@ -76,3 +78,20 @@ def vis_feil():
         utdata.append(Markup(f"<a href='{path}'>{path}: <b>{status}</b></a>"))
     return render_template("default.html", tittel="Magdalons lekegrind", utdata=utdata, bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
 """
+
+
+import os
+from flask import send_from_directory
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static\\favicons'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+#Error handlers
+
+@app.errorhandler(404)
+def page_not_found(error):
+    print("hello")
+    print(str(error))
+    return str(vars(error)) + "<p>" + str(vars(request)), 404
