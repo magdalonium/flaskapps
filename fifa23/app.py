@@ -402,7 +402,7 @@ def lag_dynamiskskjema(ra=defaultdata):
 """
 dynamiskskjema = lag_dynamiskskjema(defaultdata)
 
-@bp.route('/dynamisk')
+#@bp.route('/dynamisk')
 def vis_dynamisk():
     #skjema = lag_dynamiskskjema(request.args)
     skjema = lag_dynamiskskjema(defaultdata)
