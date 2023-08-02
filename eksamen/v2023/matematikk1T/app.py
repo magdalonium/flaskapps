@@ -39,7 +39,7 @@ def konverter(modul, tittel, innledning=None):
     for name, attr in getmembers(modul):
       if name.split("_", 1)[0] == "filter":
         bp.add_app_template_filter(attr, navn.split("_", 1)[1])
-    def index():
+    def vis_innhold():
         utdata = []
         for rule in modul.app.url_map.iter_rules():
           if rule.endpoint.split(".")[-1] in ['show', 'vis']:
@@ -55,7 +55,7 @@ def konverter(modul, tittel, innledning=None):
                                innledning = innledning,
                                utdata=utdata,
                                bakgrunn=bakgrunn)
-    bp.add_url_rule('/innhold', view_func = index)
+    bp.add_url_rule('/innhold', view_func = vis_innhold)
 
     endepunkter[navn] = [('index', '/innhold')]
     for rule in modul.app.url_map.iter_rules():
@@ -74,19 +74,19 @@ for modul, tittel, innledning in zip(moduler, titler, innledninger):
 app = Flask(__name__)
 @bp.route('/')
 def vis():
-  utdata = [Markup(f"<h2>{UNDERTITTEL}</h2>")]
-  utdata.append(Markup(f"<h3><a href='{url_for('.' + imports[0] + '.index')}'>{titler[0]}</a></h3>"))
+  brødtekst = [Markup(f"<h2>{UNDERTITTEL}</h2>")]
+  brødtekst.append(Markup(f"<h3><a href='{url_for('.' + imports[0] + '.index')}'>{titler[0]}</a></h3>"))
   for ende, understi in endepunkter[imports[0]]:
       sti = url_for("." + imports[0] + "." + ende)
-      utdata.append(Markup(f"<p><a href = {sti}>{understi}</a></p>"))
-  utdata.append(Markup("<h3>Del 2</h3>"))
+      brødtekst.append(Markup(f"<p><a href = {sti}>{understi}</a></p>"))
+  brødtekst.append(Markup("<h3>Del 2</h3>"))
   for modul, tittel in zip(imports[1:], titler[1:]):
-      utdata.append(Markup(f"<h4><a href='{url_for('.' + modul + '.index')}'>{tittel}</a></h4>"))
+      brødtekst.append(Markup(f"<h4><a href='{url_for('.' + modul + '.index')}'>{tittel}</a></h4>"))
       for ende, understi in endepunkter[modul]:
           sti = url_for("." + modul + "." + ende)
-          utdata.append(Markup(f"<p><a href = {sti}>{understi}</a></p>"))
+          brødtekst.append(Markup(f"<p><a href = {sti}>{understi}</a></p>"))
 
-  return render_template("default.html", tittel = TITTEL, utdata=utdata, bakgrunn=None)
+  return render_template("default.html", tittel = TITTEL, brødtekst=brødtekst, bakgrunn=None)
 
 app.register_blueprint(bp, url_prefix='/')
 

@@ -12,7 +12,7 @@ except Exception:
     pass
 
 NETTSTEDTITTEL = "Magdalons lekegrind"
-
+INNLEDNING = [Markup("<p>Dette er en side jeg har satt sammen for å vise webapper laget med <a href='https://flask.palletsprojects.com/'>Flask</a>. Forklaringer finner du på hjemmesiden min: <a href='https://magdalon.wordpress.com/tag/flask/'>Magdalons syn på verden</a></p>")]
 
 from eksamen.app import bp as bpe
 from flask_intro.app import bp as bpi
@@ -26,7 +26,7 @@ eksamenssett = [('eksamen.h2020.matematikk1P.oppgave7.index', 'Matematikk 1P hø
                 ('eksamen.h2021.matematikk1P.oppgave7.index', 'Matematikk 1P høst 2021: Oppgave 7'),
                 ('eksamen.h2022.matematikk1P.del1.index', 'Matematikk 1P høst 2022: Del 1'),
                 ('eksamen.h2022.matematikk1P.oppgave7.index', 'Matematikk 1P høst 2022: Oppgave 7'),
-                ('eksamen.v2023.matematikk1T.del1.index', 'Matematikk 1T vår 2023: Del 1')]
+                ('eksamen.v2023.matematikk1T.del1.vis_innhold', 'Matematikk 1T vår 2023: Del 1')]
 
 @app.route('/')
 def vis():
@@ -87,11 +87,28 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static\\favicons'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/innhold')
+def vis_innhold():
+    stier = []
+    for rule in app.url_map.iter_rules():
+      if not rule.arguments:
+        stier.append(Markup(f"<p><a href='{url_for(rule.endpoint)}'>{rule}</a></p>"))
+      else:
+        stier.append(Markup(f"<p>{rule}</p>"))
+    return render_template("default.html",
+                           tittel= NETTSTEDTITTEL,
+                           innledning=INNLEDNING,
+                           stier = stier,
+                           bakgrunn='bilder/bakgrunn/fremtidens_skole.jpg')
+def fun(x, y, z):
+    return False
+app.handle_url_build_error = fun
 
+"""
 #Error handlers
-
 @app.errorhandler(404)
 def page_not_found(error):
     print("hello")
     print(str(error))
     return str(vars(error)) + "<p>" + str(vars(request)), 404
+"""

@@ -42,20 +42,38 @@
   <body>
 {% block content %}
 <h1>{{tittel}}</h1>
+{% block nav %}
 <nav>
-    <a href="{{'/'}}">Hjem</a>
-    <a href="{{'..'}}">Opp</a>
-
+    <a href="../">Opp</a>
+    {% set vu = url_for(".vis") %}
+    {% if vu %}
+        <a href='{{vu}}'>Hjem</a>
+    {% endif %}
+    {% set vi = url_for(".vis_innhold") %}
+    {% if vi %}
+        <a href='{{vi}}'>Innhold</a>
+    {% endif %}
+    <span style="float: right; margin: 0;;"><a href='{{url_for(".vis")}}'>Magdalons lekegrind</a></span>
 </nav>
+{% endblock %}
+{% if undertittel %}
+    <h2>{{undertittel}}</h2>
+{% endif %}
+
 {% if innledning %}
     <h3>Innledning</h3>
-    {% for avsnitt in innledning %}
-        {{avsnitt}}
+    {% for element in innledning %}
+        {{element}}
+    {% endfor %}
+{% endif %}
+
+{% if brødtekst %}
+    {% for element in brødtekst %}
+        {{element}}
     {% endfor %}
 {% endif %}
 
 {% block skjema %}
-
 {% if skjema %}
   <h3>Input</h3>
   {% if skjema.errors %}
@@ -77,23 +95,38 @@
   </form>
 {% endif %}
 {% endblock %}
+
 {% block output %}
+
 {% if utdata %}
     <h3>Resultat</h3>
 {% endif %}
+
 {% if utdata is mapping %}
+
   <dl>
   {% for k, v in utdata.items() %}
     <dt>{{k}}</dt><dd>{{v}}</dd>
   {% endfor %}
   </dl>
 {% elif utdata is iterable %}
+
   {% for data in utdata %}
     {{data}}
   {% endfor %}
-{% else %}
-  {{utdata}}
 {% endif %}
+
+
+
+{% endblock %}
+
+{% block stier %}
+    {% if stier %}
+        <h3>Registrerte stier</h3>
+        {% for sti in stier %}
+            {{sti}}
+        {% endfor %}
+    {% endif %}
 {% endblock %}
 {% endblock %}
   </body>

@@ -9,6 +9,7 @@
 {% endmacro %}
 {% block output %}
 {{ super() }}
+{% if utslag %}
 <h4>Mest sannsynlig utslagsspill</h4>
 <table style='margin-left: auto; margin-right: auto;'>
     <tr>
@@ -28,4 +29,5 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
 {% endblock %}

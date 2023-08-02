@@ -18,8 +18,6 @@ Created on Fri Jul 21 11:12:09 2023
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import sympy as sp
-
 
 from flask import Blueprint, Flask, render_template, url_for, request
 from wtforms import Form, SubmitField, SelectField
@@ -28,14 +26,16 @@ from pathlib import Path
 
 NETTSTEDTITTEL = "VM-kalkulator"
 INNLEDNING = [Markup("<p>Denne webappen bruker lagenes <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>Fifa-rating</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball-VM for kvinner.</p>"),
-              Markup("<p>Jeg har tidligere gjort de samme beregningene for Fotball-VM for herrer i Quatar: <a href='https://magdalon.wordpress.com/2022/12/03/hvem-vinner-vm/'>Hvem vinner VM? - Magdalons syn på verden</a>.</p>"),
-              Markup("<h3>Teori</h3>"),
-              Markup("<p>Vi finner sannsynligheten <i>p</i> for at lag 1 vinner med formelen:</p>"),
-              Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mn>10</mn><mrow><mo>-</mo><mfrac><mi>x</mi><mn>2</mn></mfrac></mrow></msup></mrow></mfrac></mrow></math></p>"),
-              Markup("<p>Hvor <i>x</i> avhenger av forholdet mellom ratingene til de to lagene:</p>"),
-              Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>x</mi><mo>=</mo><mrow><mrow><mfrac><msub><mi>R</mi><mi>1</mi></msub><mn>200</mn></mfrac></mrow><mo>-</mo><mrow><mfrac><msub><mi>R</mi><mi>2</mi></msub><mn>200</mn></mfrac></mrow></mrow></mrow></math></p>"),
-              Markup("<p> Siden vi ser på utslagsrundene ser vi vekk i fra sannsynligheten for uavgjort, så sannsynligheten for at lag 2 vinner blir <i>1 - p</i>.</p>")]
+              Markup("<p>Jeg har tidligere gjort de samme beregningene for Fotball-VM for herrer i Quatar: <a href='https://magdalon.wordpress.com/2022/12/03/hvem-vinner-vm/'>Hvem vinner VM? - Magdalons syn på verden</a>.</p>")]
 
+BRØDTEKST = [Markup("<h3>Teori</h3>"),
+             Markup("<p>Vi finner sannsynligheten <i>p</i> for at lag 1 vinner med formelen:</p>"),
+             Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mn>10</mn><mrow><mo>-</mo><mfrac><mi>x</mi><mn>2</mn></mfrac></mrow></msup></mrow></mfrac></mrow></math></p>"),
+             Markup("<p>Hvor <i>x</i> avhenger av forholdet mellom ratingene til de to lagene:</p>"),
+             Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>x</mi><mo>=</mo><mrow><mrow><mfrac><msub><mi>R</mi><mi>1</mi></msub><mn>200</mn></mfrac></mrow><mo>-</mo><mrow><mfrac><msub><mi>R</mi><mi>2</mi></msub><mn>200</mn></mfrac></mrow></mrow></mrow></math></p>"),
+             Markup("<p> Siden vi ser på utslagsrundene ser vi vekk i fra sannsynligheten for uavgjort, så sannsynligheten for at lag 2 vinner blir <i>1 - p</i>.</p>")]
+
+endepunkter = []
 navn = Path(__file__).parts[-2]
 bp = Blueprint(navn, __name__, template_folder='templates', static_folder = 'static')
 
@@ -147,6 +147,7 @@ class Enkeltskjema(Form):
     H2 = SelectField("Andreplass gruppe H", choices = grupper['H'], default = grupper['H'][1])
     beregn = SubmitField("Beregn!")
 
+endepunkter.append('vis_enkel')
 @bp.route('/enkel')
 def vis_enkel():
     skjema = Enkeltskjema(request.args)
@@ -158,6 +159,7 @@ def vis_enkel():
     return render_template("default.html",
                            tittel=NETTSTEDTITTEL,
                            innledning=INNLEDNING,
+                           brødtekst = BRØDTEKST,
                            skjema = skjema,
                            utdata = utdata,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
@@ -199,6 +201,7 @@ def forbered_inputtabell(resultat, **kwargs):
             Markup(df.to_html(float_format=lambda x: f"{x:.3f}", justify='center')),
             ]
 
+endepunkter.append('vis_inputtabell')
 @bp.route('/inputtabell')
 def vis_inputtabell():
     skjema = lag_tabellskjema(request.args)
@@ -246,7 +249,10 @@ def forbered_søyle(resultat, **kwargs):
             Markup("<h4>Rangerte vinnersannsynligheter</h4>"),
             Markup(tegn_søylediagram(df))
             ]
-@bp.route('/', endpoint='vis')
+
+endepunkter.append('vis')
+endepunkter.append('vis_søyle')
+
 @bp.route('/søyle')
 def vis_søyle():
     #print(request.args)
@@ -259,6 +265,7 @@ def vis_søyle():
     return render_template("inputtabell.html",
                            tittel=NETTSTEDTITTEL,
                            innledning=INNLEDNING,
+                           brødtekst = BRØDTEKST,
                            skjema = skjema,
                            utdata = utdata,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
@@ -286,7 +293,8 @@ utslag = [['Norge', 'Japan', 'Spania', 'Sveits', 'USA', 'Italia', 'Sverige', 'Ne
           ['USA']]
 
 
-
+endepunkter.append('vis_bracket')
+@bp.route('/', endpoint='vis')
 @bp.route('/bracket')
 def vis_bracket():
     skjema = lag_tabellskjema(request.args)
@@ -294,16 +302,24 @@ def vis_bracket():
       lag = [skjema.resultat.data[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
       utslag = lag_bracket(lag)
       utdata = forbered_søyle(**skjema.data)
+    elif skjema.beregn.data:
+      utslag = None
+      utdata = None
     else:
-        pass
+      skjema = lag_tabellskjema()
+      utslag = None
+      utdata = None
+
     return render_template("bracket.html",
                            tittel=NETTSTEDTITTEL,
                            innledning=INNLEDNING,
+                           brødtekst = BRØDTEKST,
                            utdata = utdata,
                            skjema = skjema,
                            utslag = utslag,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
+endepunkter.append('vis_inputbracket')
 @bp.route('/inputbracket')
 def vis_inputbracket():
     skjema = lag_tabellskjema(request.args)
@@ -311,20 +327,26 @@ def vis_inputbracket():
       lag = [skjema.resultat.data[ord(g) - 65][int(l) - 1] for g, l in rekkefølge]
       utslag = lag_bracket(lag)
       utdata = forbered_søyle(**skjema.data)
+    elif skjema.beregn.data:
+      utslag = None
+      utdata = None
     else:
-        pass
+      skjema = lag_tabellskjema()
+      utslag = None
+      utdata = None
+
+
     return render_template("inputbracket.html",
                            tittel=NETTSTEDTITTEL,
                            innledning=INNLEDNING,
+                           brødtekst = BRØDTEKST,
                            utdata = utdata,
                            skjema = skjema,
                            utslag = utslag,
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
+
 #%%
-
-
-
 
 
 nr = np.array([(0,0), (2,1),
@@ -400,21 +422,20 @@ def vis_dynamisk():
                            bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
 
 
-
-
 #%%
-app = Flask(__name__)
-@app.route('/innhold')
-def vis():
-  utdata = []
-  for rule in app.url_map.iter_rules():
-    if not rule.arguments:
-      utdata.append(Markup(f"<a href='{url_for(rule.endpoint)}'>{rule}</a>"))
+
+
+@bp.route('/innhold')
+def vis_innhold():
+  stier = []
+  for ende in endepunkter:
+      stier.append(Markup(f"<p><a href='{url_for('.' + ende)}'>{ende}</a></p>"))
   return render_template("default.html",
                          tittel = NETTSTEDTITTEL,
-                         innledning=INNLEDNING,
-                         utdata=utdata)
+                         innledning= INNLEDNING,
+                         stier=stier)
 
+app = Flask(__name__)
 app.register_blueprint(bp)
 
 
