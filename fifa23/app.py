@@ -25,7 +25,7 @@ from markupsafe import Markup
 from pathlib import Path
 
 NETTSTEDTITTEL = "VM-kalkulator"
-INNLEDNING = [Markup("<p>Denne webappen bruker lagenes <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>Fifa-rating</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball-VM for kvinner.</p>"),
+INNLEDNING = [Markup("<p>Denne webappen bruker lagenes <a href='https://www.fifa.com/fifa-world-ranking/women?dateId=ranking_20230609'>FIFA-rating</a> til å <a href='https://en.wikipedia.org/wiki/FIFA_Women%27s_World_Ranking#Ranking_procedure'>regne ut</a> vinnersjanser i utslagsrundene i fotball-VM for kvinner.</p>"),
               Markup("<p>Jeg har tidligere gjort de samme beregningene for Fotball-VM for herrer i Quatar: <a href='https://magdalon.wordpress.com/2022/12/03/hvem-vinner-vm/'>Hvem vinner VM? - Magdalons syn på verden</a>.</p>")]
 
 BRØDTEKST = [Markup("<h3>Teori</h3>"),
@@ -34,6 +34,8 @@ BRØDTEKST = [Markup("<h3>Teori</h3>"),
              Markup("<p>Hvor <i>x</i> avhenger av forholdet mellom ratingene til de to lagene:</p>"),
              Markup("<p style='text-align: center;'><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>x</mi><mo>=</mo><mrow><mrow><mfrac><msub><mi>R</mi><mi>1</mi></msub><mn>200</mn></mfrac></mrow><mo>-</mo><mrow><mfrac><msub><mi>R</mi><mi>2</mi></msub><mn>200</mn></mfrac></mrow></mrow></mrow></math></p>"),
              Markup("<p> Siden vi ser på utslagsrundene ser vi vekk i fra sannsynligheten for uavgjort, så sannsynligheten for at lag 2 vinner blir <i>1 - p</i>.</p>")]
+
+BAKGRUNN = "bilder/bakgrunn/lionesses.jpg"
 
 endepunkter = []
 navn = Path(__file__).parts[-2]
@@ -162,7 +164,7 @@ def vis_enkel():
                            brødtekst = BRØDTEKST,
                            skjema = skjema,
                            utdata = utdata,
-                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+                           bakgrunn = BAKGRUNN)
 
 from wtforms import FormField, FieldList, StringField
 from collections import defaultdict
@@ -214,7 +216,7 @@ def vis_inputtabell():
                            innledning=INNLEDNING,
                            skjema = skjema,
                            utdata = utdata,
-                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+                           bakgrunn = BAKGRUNN)
 
 from matplotlib.figure import Figure
 import base64
@@ -268,7 +270,7 @@ def vis_søyle():
                            brødtekst = BRØDTEKST,
                            skjema = skjema,
                            utdata = utdata,
-                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+                           bakgrunn = BAKGRUNN)
 
 
 def lag_bracket(lag):
@@ -317,7 +319,7 @@ def vis_bracket():
                            utdata = utdata,
                            skjema = skjema,
                            utslag = utslag,
-                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+                           bakgrunn = BAKGRUNN)
 
 endepunkter.append('vis_inputbracket')
 @bp.route('/inputbracket')
@@ -343,7 +345,7 @@ def vis_inputbracket():
                            utdata = utdata,
                            skjema = skjema,
                            utslag = utslag,
-                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+                           bakgrunn = BAKGRUNN)
 
 
 #%%
@@ -419,7 +421,7 @@ def vis_dynamisk():
                            utdata = utdata,
                            skjema = skjema,
                            utslag = utslag,
-                           bakgrunn = "bilder/bakgrunn/rapinoe.jpg")
+                           bakgrunn = BAKGRUNN)
 
 
 #%%

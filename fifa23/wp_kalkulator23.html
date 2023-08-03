@@ -1,0 +1,344 @@
+# -*- coding: utf-8 -*-
+<!-- wp:heading {"level":1} -->
+<h1 id ="Hvem-vinner-fotballVM-for-kvinner_241">Hvem vinner fotball-VM for kvinner?</h1>
+<!-- /wp:heading -->
+
+
+<!-- wp:group {"style":{"color":{"background":"#dde"}}} --><div class="wp-block-group has-background" style="background-color:#fafafc"><!-- wp:paragraph -->
+<p>Created on Thu Aug  3 20:59:45 2023</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>@author: magdalon</p>
+<!-- /wp:paragraph -->
+
+
+</div><!-- /wp:group -->
+<!-- wp:paragraph -->
+<p>Nå som gruppespillet er ferdig kan vi bruke sannsynlighetsregning til å si noe om hvilket lag som kommer til å gå seirende ut av utslagsspillet. På grunn av trekningen av lagene er det ikke nødvendigvis det høyest ratede laget, USA, som er favoritten.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:more -->
+<!--more-->
+<!-- /wp:more -->
+
+<!-- wp:heading -->
+<h2 id="innhold">Innhold</h2><!-- /wp:heading -->
+
+<!-- wp:list {"ordered":false} -->
+<ul><li><a href="#Vinne-en-kamp_171">Vinne en kamp</a><ul>
+<li><a href="#Regneeksempel_181">Regneeksempel</a></li>
+</ul></li>
+
+<li><a href="#Videre-fra-delfinalene_191">Videre fra delfinalene</a></li>
+<li><a href="#VMvinner_201">VM-vinner</a></li>
+<li><a href="#Analyse_211">Analyse</a><ul>
+<li><a href="#Lette-og-tunge-veier-til-gull_221">Lette og tunge veier til gull</a></li>
+</ul></li>
+
+<li><a href="#Konklusjon_231">Konklusjon</a></li></ul>
+<!-- /wp:list -->
+
+
+<!-- wp:heading {"level":2} -->
+<h2 id ="Vinne-en-kamp_171">Vinne en kamp</h2>
+<!-- /wp:heading -->
+
+
+<!-- wp:paragraph -->
+<p>Vi begynner med å finne en metode for å forutsi vinnersansynlighetene i en enkeltkamp. Til dette bruker vi Fifa-rankingen til de to lagene. Vi finner sannsynligheten <i>p</i> for at lag 1 vinner med formelen:</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mn>10</mn><mrow><mo>-</mo><mfrac><mi>x</mi><mn>2</mn></mfrac></mrow></msup></mrow></mfrac></mrow></math></p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Hvor <i>x</i> avhenger av forholdet mellom ratingen til de to lagene:</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p><math xmlns = 'http://www.w3.org/1998/Math/MathML'><mrow><mi>x</mi><mo>=</mo><mrow><mrow><mfrac><msub><mi>R</mi><mi>1</mi></msub><mn>200</mn></mfrac></mrow><mo>-</mo><mrow><mfrac><msub><mi>R</mi><mi>2</mi></msub><mn>200</mn></mfrac></mrow></mrow></mrow></math></p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Siden vi ser på utslagsrundene ser vi vekk i fra sannsynligheten for uavgjort, så sannsynligheten for at lag 2 vinner blir <i>1 - p</i>.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan lage en Python-funksjon som regner ut denne sannsynligheten.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [1]: def p(score1, score2):
+   ...:     return 1/(10**(-(score1 - score2)/400) + 1)</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:heading {"level":3} -->
+<h3 id ="Regneeksempel_181">Regneeksempel</h3>
+<!-- /wp:heading -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan se på vinnersannsynlighetene i en eventuell finale.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [2]: usa = 2090
+In [3]: england = 2041
+In [4]: print(p(usa, england))
+0.5700528235839882
+</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+<p>Vi ser at i en eventuell finale er det 57% sannsynlighet for at USA vinner.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan også se på en mulig semifinale.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [5]: norge = 1908
+In [6]: print(p(usa, norge))
+0.7403284195148304
+</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+<p>Vi ser at når lagene er nærme i ranking er vinnersjansene omtrent 50/50, mens når landene er langt unna er det mer sannsynlig at det beste landet vinner.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi må også huske på at FIFA-rakningen er omstridt, vi bruker denne mest fordi den er lett å regne med. Hvis du har en bedre formel kan du gjerne bruke den i stedet.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:heading {"level":2} -->
+<h2 id ="Videre-fra-delfinalene_191">Videre fra delfinalene</h2>
+<!-- /wp:heading -->
+
+
+<!-- wp:paragraph -->
+<p>Da vi så på herre-fotball(hvem-vinner-vm) fant vi vinnersannsynlighetene ved simulering. Denne gangen skal vi bare finne sannsynlighetene for å gå videre med eksakte beregninger.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>For å vinne sannsynligheten for at et lag vinner kvart-, semi- og finalen må vi betinge på alle lagene de kan møte på veien.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Hvis Norge (N) skal vinne kvartfinalen (N2) må de først vinne åttendedelsfinalen (N1) og så slå enten Sverige (S) eller USA (U) i kvartfinalen. Vi betinger derfor sannsynligheten på om Sverige (S1) eller USA (U1) vinner sin åttendedelsfinale.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>P(N2) = P(N1)*(P(N2|S1)*P(S1) + P(N2|U1)*P(U1))</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [7]: japan = 1917
+In [8]: sverige = 2050
+In [9]: pN2 = p(norge, japan)*(p(norge, sverige)*p(sverige, usa) + p(norge, usa)*p(usa, sverige))
+In [10]: print(pN2)
+0.13652950569015582
+</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+<p>Vi ser at Norges sjanser er relativt dårlige.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:heading {"level":2} -->
+<h2 id ="VMvinner_201">VM-vinner</h2>
+<!-- /wp:heading -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan nå finne alle sannsynlighetene i utslagspillet og bruke dette til å finne lagenes sannsynlighet til å finne finalen og hele VM.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi begynner med å legge inn land, score i en <a href='https://pandas.pydata.org/'>Pandas</a>-<code><a href='https://pandas.pydata.org/docs/reference/frame.html'>DataFrame</a></code>. Vi legger også inn kolonner for sannsynligheten for å vinne delfinalene og finalen. pg er sannsynligheten for å komme videre fra gruppespillet, p8 er sannsynligheten for å vinne åttendedelsfinalen, etc. Siden alle lagene er videre er den første sannsynligheten 1, mens de andre må vi regne ut.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [11]: lag = ['Sveits', 'Spania', 'Nederland', 'Sør-Afrika',
+    ...:        'Japan', 'Norge', 'Sverige', 'USA',
+    ...:        'Australia', 'Danmark', 'Frankrike', 'Marokko',
+    ...:        'England', 'Nigeria', 'Colombia', 'Jamaica']
+In [12]: rating = [1765.90, 2002.28, 1980.47, 1471.52,
+    ...:           1916.68, 1908.25, 2049.71, 2090.03,
+    ...:           1919.69, 1866.25, 2026.65, 1334.08,
+    ...:           2040.76, 1554.94, 1702.64, 1536.81]
+In [13]: import pandas as pd
+In [14]: df = pd.DataFrame({"rating" : rating,
+    ...:                    "pg" : 1,
+    ...:                    "p8" : 0,
+    ...:                    "pq" : 0,
+    ...:                    "ps" : 0,
+    ...:                    "p1" : 0},
+    ...:                    index = lag)</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan nå lage en løkke som bruker formelen for total sannsynlighet for å regne ut sannsynlighetene kolonne for kolonne. For åttendedelsfinalene ser vi på to og to lag, mens for kvartfinalene, semifinalene og finalen ser vi på grupper av 4, 8 og til slutt alle lagene.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [15]: for n in range(0, 4):
+    ...:   offset = 2**n
+    ...:   for i in range(8//offset):
+    ...:     forrige = df.columns[n + 1]
+    ...:     neste = df.columns[n + 2]
+    ...:     for j in range(offset):
+    ...:       for k in range(offset):
+    ...:         a = df.index[2*offset*i + j]
+    ...:         b = df.index[2*offset*i + offset + k]
+    ...:         df.at[a, neste] += df.at[a, forrige]*df.at[b, forrige]*p(df.at[a, 'rating'], df.at[b, 'rating'])
+    ...:         df.at[b, neste] += df.at[a, forrige]*df.at[b, forrige]*p(df.at[b, 'rating'], df.at[a, 'rating'])</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+<p>Til slutt får vi et resultat:</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [16]: print(df.to_string(float_format=lambda x: f"{x:.2f}"))
+            rating  pg   p8   pq   ps   p1
+Sveits     1765.90   1 0.20 0.05 0.01 0.00
+Spania     2002.28   1 0.80 0.44 0.20 0.10
+Nederland  1980.47   1 0.95 0.50 0.22 0.10
+Sør-Afrika 1471.52   1 0.05 0.00 0.00 0.00
+Japan      1916.68   1 0.51 0.15 0.06 0.02
+Norge      1908.25   1 0.49 0.14 0.06 0.02
+Sverige    2049.71   1 0.44 0.30 0.18 0.10
+USA        2090.03   1 0.56 0.41 0.27 0.16
+Australia  1919.69   1 0.58 0.21 0.08 0.03
+Danmark    1866.25   1 0.42 0.13 0.04 0.01
+Frankrike  2026.65   1 0.98 0.67 0.36 0.19
+Marokko    1334.08   1 0.02 0.00 0.00 0.00
+England    2040.76   1 0.94 0.84 0.49 0.26
+Nigeria    1554.94   1 0.06 0.02 0.00 0.00
+Colombia   1702.64   1 0.72 0.11 0.02 0.00
+Jamaica    1536.81   1 0.28 0.02 0.00 0.00
+</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan fremstille dette resultatet grafisk.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [17]: df.p1.sort_values().plot.barh()</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+[Bilde: F:\users\magdalon\Dropbox\Documents\Python\mysite\fifa23\kalkulator23-filer\kalkulator23-bilde-1.png]<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi ser at England har den beste vinnersjansen. England som ligger best an fordi USA sin sin vei til finalen (Spania, Nederland, Sverige fra topp 6) er mye hardere enn Englands (bare Frankrike fra topp 6).</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:heading {"level":2} -->
+<h2 id ="Analyse_211">Analyse</h2>
+<!-- /wp:heading -->
+
+
+<!-- wp:heading {"level":3} -->
+<h3 id ="Lette-og-tunge-veier-til-gull_221">Lette og tunge veier til gull</h3>
+<!-- /wp:heading -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan tegne vinnersjansene som en funksjon av ratingen.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [18]: import matplotlib.pyplot as plt
+In [19]: plt
+    ...: df.plot.scatter(x='rating', y='p1')
+    ...: for idx, row in df.iterrows():
+    ...:     plt.annotate(idx, (row['rating'], row['p1']))</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+[Bilde: F:\users\magdalon\Dropbox\Documents\Python\mysite\fifa23\kalkulator23-filer\kalkulator23-bilde-2.png]<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi ser at sammenhengen mellom rating og vinnersannsynlighet ikke er lineær.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Vi kan se på "lette" og "tunge" veier ved å sortere lagene etter rating og vinnersannsynlighet og tegne disse i et punktdiagram.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:syntaxhighlighter/code {"language":"python", "lineNumbers":false} -->
+<pre class="wp-block-syntaxhighlighter-code">In [20]: plt
+    ...: df.rank().plot.scatter(x='rating', y='p1')
+    ...: for idx, row in df.rank().iterrows():
+    ...:     plt.annotate(idx, (row['rating'], row['p1']))
+    ...: plt.axline((0,0), slope=1, color="black")</pre>
+<!-- /wp:syntaxhighlighter/code -->
+
+
+<!-- wp:paragraph -->
+[Bilde: F:\users\magdalon\Dropbox\Documents\Python\mysite\fifa23\kalkulator23-filer\kalkulator23-bilde-3.png]<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>Lagene som ligger over streken kommer høyere opp på listen over sannsynlige vinnere enn det ratingen skulle tilsi, og kan sies å ha en <i>lett</i> vei, mens lagene under streken kan sies å ha en <i>tung</i> vei.</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:heading {"level":2} -->
+<h2 id ="Konklusjon_231">Konklusjon</h2>
+<!-- /wp:heading -->
+
+
+<!-- wp:paragraph -->
+<p>Det ser ut til at vi får høre mer av dette:</p>
+<!-- /wp:paragraph -->
+
+
+<!-- wp:paragraph -->
+<p>https://youtu.be/6kRrQuVKiUE?t=40</p>
+<!-- /wp:paragraph -->
+
