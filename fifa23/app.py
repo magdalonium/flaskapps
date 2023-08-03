@@ -72,25 +72,25 @@ score = {'Argentina' : 1682.45,
  'Vietnam' : 1648.,
  'Zambia' : 1298.31}
 
-grupper = {'A': ['Norge', 'Sveits', 'New Zealand', 'Filippinene'],
-           'B': ['Canada', 'Australia', 'Irland', 'Nigeria'],
-           'C': ['Spania', 'Japan', 'Costa Rica', 'Zambia'],
+grupper = {'A': ['Sveits', 'Norge', 'New Zealand', 'Filippinene'],
+           'B': ['Australia', 'Nigeria', 'Irland', 'Canada'],
+           'C': ['Japan', 'Spania', 'Costa Rica', 'Zambia'],
            'D': ['England', 'Danmark', 'Kina', 'Haiti'],
-           'E': ['USA', 'Nederland', 'Portugal', 'Vietnam'],
-           'F': ['Frankrike', 'Brasil', 'Jamaica', 'Panama'],
-           'G': ['Sverige', 'Italia', 'Argentina', 'Sør-Afrika'],
-           'H': ['Tyskland', 'Sør-Korea', 'Colombia', 'Marokko']}
+           'E': ['Nederland', 'USA', 'Portugal', 'Vietnam'],
+           'F': ['Frankrike', 'Jamaica', 'Brasil', 'Panama'],
+           'G': ['Sverige', 'Sør-Afrika', 'Argentina', 'Italia'],
+           'H': ['Colombia', 'Marokko', 'Tyskland', 'Sør-Korea']}
 def p(score1, score2):
     return 1/(10**(-(score1 - score2)/400) + 1)
 
 rekkefølge = ['A1', 'C2',
-              'C1', 'A2',
               'E1','G2',
+              'C1', 'A2',
               'G1','E2',
               'B1', 'D2',
+              'F1', 'H2',
               'D1', 'B2',
-              'H1', 'F2',
-              'F1', 'H2']
+              'H1', 'F2']
 
 rating = 'FIFA-rating'
 pg = 'Videre fra gruppe-spill'
